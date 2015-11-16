@@ -12,7 +12,9 @@ public class Game {
 	 */
 	public void setPiles(String input){
 		String[] inputArray = input.split(" ");
-		//todo: string --> integer array
+		for(int i = 0; i < inputArray.length; i++){
+			piles[i] = Integer.parseInt(inputArray[i]);
+		}
 	}
 	
 	/**
@@ -24,25 +26,28 @@ public class Game {
 			piles[i] = seedsPerPile;//assign number to each pile
 		}
 		System.out.println("game created");
-		System.out.print(Arrays.toString(piles));
 	}
 	
 	/**
 	 * returns the current piles in the same format as they are inputed
 	 */
-	public void getPiles(){
-		//todo println string		
+	public void outputPiles(){
+		for(int i = 0; i < piles.length; i++){
+			System.out.print(piles[i] + " ");
+		}
+		System.out.println();
 	}
 	
 	
 	private void computeNextMove(){
-		//place where all the work gets done.
+		//todo
 	}
 
 	public static void main(String[] args) {
 		Game game = new Game();
 		game.newGame();
-		//todo: initialize game.
+		//todo: input, do move
+		game.outputPiles();
 	}
 
 }
