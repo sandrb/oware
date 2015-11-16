@@ -9,12 +9,23 @@ public class Game {
 	 */
 	public void setPiles(String input){
 		String[] inputArray = input.split(" ");
-		
+		//todo: string --> integer array
+	}
+	
+	/**
+	 * returns the current piles in the same format as they are inputed
+	 */
+	public void getPiles(){
+		//todo println string		
+	}
+	
+	private void computeNextMove(){
+		//place where all the work gets done.
 	}
 
 	public static void main(String[] args) {
 		Game game = new Game();
-		
+		//todo: initialize game.
 	}
 
 }
