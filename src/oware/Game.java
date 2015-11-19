@@ -12,11 +12,18 @@ public class Game {
 	/**
 	 * Sets the values for the current piles
 	 * @param input: the values for the current piles, 24 non-negative integers differentiated by spaces representing the 12 piles
+	 * @param input: it is also possible to name the changed piles only for example 3 5 to state that pile 3 has been changed to 5, assumed we changed less than 12 piles
 	 */
 	public void setPiles(String input){
 		String[] inputArray = input.split(" ");
-		for(int i = 0; i < inputArray.length; i++){
-			currentPiles[i] = Integer.parseInt(inputArray[i]);
+		if(inputArray.length > 23){
+			for(int i = 0; i < inputArray.length; i++){
+				currentPiles[i] = Integer.parseInt(inputArray[i]);
+			}			
+		}else{
+			for(int i = 0; i < inputArray.length; i= i + 2){
+				currentPiles[i] = Integer.parseInt(inputArray[i+1]);
+			}			
 		}
 	}
 	
