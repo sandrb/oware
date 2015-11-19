@@ -48,6 +48,18 @@ public class Game {
 		System.out.println();
 	}
 	
+	/**
+	 * returns the changes we made
+	 */
+	public void outputChanges(){
+		for(int i = 0; i < nextPiles.length; i++){
+			if(nextPiles[i] != currentPiles[i]){
+				System.out.print(i + " " + nextPiles[i]);				
+			}
+		}
+		System.out.println();
+	}
+	
 	//A move is valid or not.
 	private boolean isValidMove(int[] tmpPiles){
 		//We need to find out all the invalid moves
