@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Game {
 	int maxSeeds = 96; //initial and maximum number of seeds
 	int[] currentPiles = new int[24]; //values represents the current piles, piles 0 - 11 are ours and piles 12 - 23 are the opponents
-	int[] nextPiles = new int[24]; //value represents the piles of next move.
+	int[] nextPiles = new int[currentPiles.length]; //value represents the piles of next move.
 	int myScore = 0; // My score, initiated with 0
 	int yourScore = 0; // The score of the opponent, initiated with 0 
 	
@@ -30,8 +30,10 @@ public class Game {
 		input = user_input.nextLine();
 		inputArray = input.split(" ");
 		for(int i = 0; i < 12; i++){
-			currentPiles[23 - i] = Integer.parseInt(inputArray[i]);
-		}		
+			currentPiles[12 + i] = Integer.parseInt(inputArray[i]);
+		}
+		
+		System.arraycopy(currentPiles, 0, nextPiles, 0, currentPiles.length);
 	}
 	
 	/**
@@ -99,8 +101,9 @@ public class Game {
 	
 	private void move(int pos_choose){
 		int num = currentPiles[pos_choose];
+		nextPiles[pos_choose] = 0;
 		for(int i = 0;i<num;i++){
-			nextPiles[(pos_choose+i+1) % 24]++;
+			nextPiles[(pos_choose+i+1) % currentPiles.length]++;
 		}
 	}
 	
@@ -119,7 +122,8 @@ public class Game {
 		game.setPiles();
 		System.out.println("Input:");
 		game.outputOriginalPiles();
-		//todo: do move
+		System.out.println("test move on place 10");
+		game.move(10);
 		System.out.println("Output:");		
 		game.outputPiles();
 	}
