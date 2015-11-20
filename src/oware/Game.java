@@ -100,11 +100,7 @@ public class Game {
 	private void move(int pos_choose){
 		int num = currentPiles[pos_choose];
 		for(int i = 0;i<num;i++){
-			if(pos_choose +i +1 < 24){
-				nextPiles[pos_choose +i +1] = 1 + currentPiles[pos_choose +i +1];
-			}else{
-				nextPiles[pos_choose +i +1 -24] = 1 + currentPiles[pos_choose +i +1 -24];
-			}
+			nextPiles[(pos_choose+i+1) % 24]++;
 		}
 	}
 	
