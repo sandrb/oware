@@ -31,6 +31,7 @@ public class Game {
 		inputArray = input.split(" ");
 		for(int i = 0; i < 12; i++){
 			currentPiles[12 + i] = Integer.parseInt(inputArray[i]);
+			//Alternatively: replace "12 + i" with "23 - i" if you want to fill up in the same way as is displayed.
 		}
 		
 		System.arraycopy(currentPiles, 0, nextPiles, 0, currentPiles.length);
@@ -64,6 +65,60 @@ public class Game {
 		System.out.println();
 	}
 	
+	//A move is valid or not.
+	private boolean isValidMove(int[] tmpPiles){
+		//We need to find out all the invalid moves
+		//Sander: is this really needed? If we just do the move() and capture() functions right we know it's always valid.
+		return true;
+	}
+	
+	/**
+	 * Sows a certain position, spreading it's seeds over the neighbors
+	 * @param pos_choose: position that is sowed, must be one of our own positions.
+	 */
+	private void sow(int pos_choose){
+		if(pos_choose >= currentPiles.length/2 || pos_choose < 0){
+		   throw new IllegalArgumentException("Invalid input for sow, was " + pos_choose + ", should be 0 <= input < " + (currentPiles.length/2));			
+		}
+		int num = currentPiles[pos_choose];
+		nextPiles[pos_choose] = 0;
+		for(int i = 0;i<num;i++){
+			nextPiles[(pos_choose+i+1) % currentPiles.length]++;
+		}
+	}
+	
+	/**
+	 * Starts capturing from a certain position
+	 * @param pos_choose: position to start capturing from, must be one from the opponent.
+	 */
+	private void capture(int pos_choose){
+		//1st input condition: must be opponents house
+		if(pos_choose >= currentPiles.length/2 || pos_choose < 0){
+		   throw new IllegalArgumentException("Invalid input for sow, was " + pos_choose + ", should be " + (currentPiles.length/2) + " <= input < " + currentPiles.length);			
+		}
+		
+		//second input condition: must be a house that changed this turn
+		if(nextPiles[pos_choose] == currentPiles[pos_choose]){
+			throw new IllegalArgumentException("Invalid input for sow, house " + pos_choose + " was not changed by this player, hence it is not allowed to sow it.");			
+		}
+		
+		//third input condition: the seed total of the house must be 2 or three
+		if(nextPiles[pos_choose] > 3 || nextPiles[pos_choose] < 2){
+			throw new IllegalArgumentException("Invalid input for sow, house " + nextPiles + " has " + nextPiles[pos_choose] + " seeds, should be 2 or 3.");			
+		}		
+		
+		//todo: capture things
+	}
+	
+	//Scenario1: In a situation to capture all the seeds of other's. Not capture.
+	
+	
+
+	private void computeNextMove(){
+		//todo, step 1: sow, optional step 2: capture
+	}
+
+	
 	/**
 	 * returns the original piles in the same format as they are inputed
 	 */
@@ -91,30 +146,6 @@ public class Game {
 		}
 		System.out.println();
 	}
-	
-	//A move is valid or not.
-	private boolean isValidMove(int[] tmpPiles){
-		//We need to find out all the invalid moves
-		//Sander: is this really needed? If we just do the move() and capture() functions right we know it's always valid.
-		return true;
-	}
-	
-	private void move(int pos_choose){
-		int num = currentPiles[pos_choose];
-		nextPiles[pos_choose] = 0;
-		for(int i = 0;i<num;i++){
-			nextPiles[(pos_choose+i+1) % currentPiles.length]++;
-		}
-	}
-	
-	//Scenario1: In a situation to capture all the seeds of other's. Not capture.
-	
-	
-
-	private void computeNextMove(){
-		//todo
-	}
-	
 
 	public static void main(String[] args) {
 		Game game = new Game();
@@ -123,7 +154,7 @@ public class Game {
 		System.out.println("Input:");
 		game.outputOriginalPiles();
 		System.out.println("test move on place 10");
-		game.move(10);
+		game.sow(10);
 		System.out.println("Output:");		
 		game.outputPiles();
 	}
