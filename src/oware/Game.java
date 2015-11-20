@@ -95,7 +95,7 @@ public class Game {
 	//A move is valid or not.
 	private boolean isValidMove(int[] tmpPiles){
 		//We need to find out all the invalid moves
-		
+		//Sander: is this really needed? If we just do the move() and capture() functions right we know it's always valid.
 		return true;
 	}
 	
