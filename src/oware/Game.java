@@ -1,6 +1,7 @@
 package oware;
 
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Game {
 	int maxSeeds = 96; //initial and maximum number of seeds
@@ -11,20 +12,26 @@ public class Game {
 	
 	/**
 	 * Sets the values for the current piles
-	 * @param input: the values for the current piles, 24 non-negative integers differentiated by spaces representing the 12 piles
-	 * @param input: it is also possible to name the changed piles only for example 3 5 to state that pile 3 has been changed to 5, assumed we changed less than 12 piles
+	 * Input should be in the following way:
+	 * Player 1: 01 02 03 04 05 06 07 08 09 10 11 12
+	 * Player 2: 24 23 22 21 20 19 18 17 16 15 14 13
 	 */
-	public void setPiles(String input){
+	public void setPiles(){
+		System.out.println("Player 1 piles? 12 numbers seperated by spaces.");
+		Scanner user_input = new Scanner( System.in );
+		String input = user_input.nextLine();
 		String[] inputArray = input.split(" ");
-		if(inputArray.length > 23){
-			for(int i = 0; i < inputArray.length; i++){
-				currentPiles[i] = Integer.parseInt(inputArray[i]);
-			}			
-		}else{
-			for(int i = 0; i < inputArray.length; i= i + 2){
-				currentPiles[i] = Integer.parseInt(inputArray[i+1]);
-			}			
-		}
+		for(int i = 0; i < 12; i++){
+			currentPiles[i] = Integer.parseInt(inputArray[i]);
+		}	
+		
+
+		System.out.println("Player 2 piles? 12 numbers seperated by spaces.");
+		input = user_input.nextLine();
+		inputArray = input.split(" ");
+		for(int i = 0; i < 12; i++){
+			currentPiles[23 - i] = Integer.parseInt(inputArray[i]);
+		}		
 	}
 	
 	/**
@@ -36,14 +43,37 @@ public class Game {
 			currentPiles[i] = seedsPerPile;//assign number to each pile
 		}
 		System.out.println("game created");
+		
 	}
 	
 	/**
 	 * returns the current piles in the same format as they are inputed
 	 */
 	public void outputPiles(){
-		for(int i = 0; i < nextPiles.length; i++){
+		System.out.print("Player 1: ");
+		for(int i = 0; i < 12; i++){
 			System.out.print(nextPiles[i] + " ");
+		}
+		System.out.println();
+		System.out.print("Player 2: ");
+		for(int i = 23; i >= 12; i--){
+			System.out.print(nextPiles[i] + " ");
+		}
+		System.out.println();
+	}
+	
+	/**
+	 * returns the original piles in the same format as they are inputed
+	 */
+	public void outputOriginalPiles(){
+		System.out.print("Player 1: ");
+		for(int i = 0; i < 12; i++){
+			System.out.print(currentPiles[i] + " ");
+		}
+		System.out.println();
+		System.out.print("Player 2: ");
+		for(int i = 23; i >= 12; i--){
+			System.out.print(currentPiles[i] + " ");
 		}
 		System.out.println();
 	}
@@ -90,7 +120,11 @@ public class Game {
 	public static void main(String[] args) {
 		Game game = new Game();
 		game.newGame();
-		//todo: input, do move
+		game.setPiles();
+		System.out.println("Input:");
+		game.outputOriginalPiles();
+		//todo: do move
+		System.out.println("Output:");		
 		game.outputPiles();
 	}
 
