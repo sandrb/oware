@@ -119,8 +119,24 @@ public class Game {
 		}
 	}
 	
+	
+	/**
+	 * @return true, if we have won, false otherwise.
+	 */
 	private boolean hasWon(){
 		//return true if: enough points OR opponent has no more valid moves.
+		if(myScore > nextPiles.length/2){
+			//at least half+1 of the seeds
+			return true;
+		}
+		
+		int opponentSeeds = 0;
+		for(int i = nextPiles.length / 2; i < nextPiles.length && opponentSeeds == 0; i++){
+			opponentSeeds += nextPiles[i];
+		}
+		if(opponentSeeds == 0){
+			return true;
+		}
 		
 		return false;
 	}
@@ -129,6 +145,8 @@ public class Game {
 	private void computeNextMove(){
 		//todo, step 1: sow, optional step 2: capture, step 3: check if we've won (only needed if we did 2)
 		//for the capture step i think it would be nice to do a greedy approach and get as much seeds as possible
+		
+		//option: infinite loop check?
 	}
 
 	
