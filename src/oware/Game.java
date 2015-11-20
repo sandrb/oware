@@ -80,6 +80,7 @@ public class Game {
 		if(pos_choose >= currentPiles.length/2 || pos_choose < 0){
 		   throw new IllegalArgumentException("Invalid input for sow, was " + pos_choose + ", should be 0 <= input < " + (currentPiles.length/2));			
 		}
+		
 		int num = currentPiles[pos_choose];
 		nextPiles[pos_choose] = 0;
 		for(int i = 0;i<num;i++){
@@ -90,6 +91,7 @@ public class Game {
 	/**
 	 * Starts capturing from a certain position
 	 * @param pos_choose: position to start capturing from, must be one from the opponent.
+	 * note: starts at the last position and goes down from there on, so if we start on 15, then follows 14, 13, etc.
 	 */
 	private void capture(int pos_choose){
 		//1st input condition: must be opponents house
@@ -107,15 +109,26 @@ public class Game {
 			throw new IllegalArgumentException("Invalid input for sow, house " + nextPiles + " has " + nextPiles[pos_choose] + " seeds, should be 2 or 3.");			
 		}		
 		
-		//todo: capture things
+		while(pos_choose >= currentPiles.length/2 && nextPiles[pos_choose] < 4 && nextPiles[pos_choose] > 1){			
+			//remove seeds
+			myScore += nextPiles[pos_choose];
+			nextPiles[pos_choose] = 0;
+			
+			//previous position
+			pos_choose--;
+		}
+	}
+	
+	private boolean hasWon(){
+		//return true if: enough points OR opponent has no more valid moves.
+		
+		return false;
 	}
 	
 	//Scenario1: In a situation to capture all the seeds of other's. Not capture.
-	
-	
-
 	private void computeNextMove(){
-		//todo, step 1: sow, optional step 2: capture
+		//todo, step 1: sow, optional step 2: capture, step 3: check if we've won (only needed if we did 2)
+		//for the capture step i think it would be nice to do a greedy approach and get as much seeds as possible
 	}
 
 	
