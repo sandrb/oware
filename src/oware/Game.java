@@ -83,10 +83,13 @@ public class Game {
 		   throw new IllegalArgumentException("Invalid input for sow, was " + pos_choose + ", should be 0 <= input < " + (currentPiles.length/2));			
 		}
 		
-		int num = currentPiles[pos_choose];
-		nextPiles[pos_choose] = 0;
-		for(int i = 0;i<num;i++){
-			nextPiles[(pos_choose+i+1) % currentPiles.length]++;
+		int i = 1;
+		while(nextPiles[pos_choose] > 0){
+			if((pos_choose+i+1) % currentPiles.length != pos_choose){//skip pos_choose
+				nextPiles[(pos_choose+i+1) % currentPiles.length]++;//place one seed
+				nextPiles[pos_choose]--;//remove one seed				
+			}
+			i++;//go on to the next position
 		}
 	}
 	
