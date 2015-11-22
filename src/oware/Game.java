@@ -230,10 +230,58 @@ public class Game {
 		
 		return 1;
 	}
+	private boolean validMove(Position pos_current,int pos_choose){
+		if(finalPosition(pos_current) == -1){ // if not final position  // has some overlap in finalPosition considering only i
+			
+			//there is no seed the function returns false
+			if(pos_current.getPiles()[pos_choose] == 0){
+				return false;
+			}
+			
+			//piles of playerA are all empty and playerB must give A seeds in the next move. 
+			int seeds = 0;
+			if(pos_current.getIsMyTurn()){ // is my turn 
+				for(int i = 12; i < 24; i++){
+					seeds += pos_current.getPiles()[i];
+				}
+				if(seeds == 0 ){ //opponent is empty
+					if(pos_current.getPiles()[pos_choose] >= 12-pos_choose){ //not finished
+						return true;
+					}else return false;
+				}		
+			}else{ // is not my turn
+				for(int i = 0; i < 12; i++){
+					seeds += pos_current.getPiles()[i];
+				}
+				if(seeds == 0 ){ //My piles are empty
+					if(pos_current.getPiles()[pos_choose] >= 24-pos_choose){ //not finished
+						return true;
+					}else return false;
+				}				
+			}
+			//capture all other's seeds
+			
+		}else return false;
+	}
+	
+	private Position playMove(Position pos_current,boolean isMyTurn,int pos_choose){
+		Position pos_next = new Position();
+		if(finalPosition(pos_current) == -1){ //if not final position
+			int num = pos_current.getPiles()[pos_choose];
+			for(int i = 0;i<num;i++){
+				if(pos_choose +i +1 < 24){
+					nextPiles[pos_choose +i +1] = 1 + currentPiles[pos_choose +i +1];
+				}else{
+					nextPiles[pos_choose +i +1 -24] = 1 + currentPiles[pos_choose +i +1 -24];
+				}
+			}
+		}else return null;
+		return pos_next;
+	}
 	
 	private int minMaxValue(Position pos_current, boolean isMyTurn, int depth){
 		int[] tab_values = new int[12];
-		Position pos_next; // In C : created on the stack: = very fast
+		Position pos_next; 
 	    if (finalPosition(pos_current) == 96){
 	    	return 96;
 	    }
