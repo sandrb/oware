@@ -225,7 +225,7 @@ public class Game {
 		//option: infinite loop check?
 	}
 	
-	private int evaluation(Position pos_current, boolean isMyTurn, int depth){
+	private int evaluation(Position pos_current, boolean isMyTurn, int depth, int pos_choose){
 		//difference of the taken seeds from capture
 		
 		return 1;
@@ -233,93 +233,113 @@ public class Game {
 	private boolean validMove(Position pos_current,int pos_choose){
 		if(finalPosition(pos_current) == -1){ // if not final position  // has some overlap in finalPosition considering only i
 			
-			//there is no seed the function returns false
+			//1. there is no seed the function returns false
 			if(pos_current.getPiles()[pos_choose] == 0){
 				return false;
 			}
 			
-			//piles of playerA are all empty and playerB must give A seeds in the next move. 
+			//2. piles of playerA are all empty and playerB must give A seeds in the next move. 
 			int seeds = 0;
 			if(pos_current.getIsMyTurn()){ // is my turn 
 				for(int i = 12; i < 24; i++){
 					seeds += pos_current.getPiles()[i];
 				}
 				if(seeds == 0 ){ //opponent is empty
-					if(pos_current.getPiles()[pos_choose] >= 12-pos_choose){ //not finished
+					if(pos_current.getPiles()[pos_choose] >= 12-pos_choose){ //I can give opponent seeds in the next move
 						return true;
 					}else return false;
-				}		
+				}else return true;		
 			}else{ // is not my turn
 				for(int i = 0; i < 12; i++){
 					seeds += pos_current.getPiles()[i];
 				}
 				if(seeds == 0 ){ //My piles are empty
-					if(pos_current.getPiles()[pos_choose] >= 24-pos_choose){ //not finished
+					if(pos_current.getPiles()[pos_choose] >= 24-pos_choose){ //Opponent can give me seeds in the next move
 						return true;
 					}else return false;
-				}				
+				}else return true;				
 			}
-			//capture all other's seeds
+			
+			//3. capture all other's seeds
 			
 		}else return false;
 	}
 	
 	private Position playMove(Position pos_current,boolean isMyTurn,int pos_choose){
 		Position pos_next = new Position();
-		if(finalPosition(pos_current) == -1){ //if not final position
+		if(finalPosition(pos_current) == -1){ //if not final position // doesn't do more valid check
 			int num = pos_current.getPiles()[pos_choose];
-			for(int i = 0;i<num;i++){
-				if(pos_choose +i +1 < 24){
-					nextPiles[pos_choose +i +1] = 1 + currentPiles[pos_choose +i +1];
-				}else{
-					nextPiles[pos_choose +i +1 -24] = 1 + currentPiles[pos_choose +i +1 -24];
+			pos_next.setPiles(pos_current.getPiles()); // copy pos_current to pos_next
+			if(pos_current.getIsMyTurn() && pos_choose<12 && pos_choose>=0){ // is my turn
+				pos_next.setPiles(pos_choose,0);
+				for(int i = 1; i <= num; i++){
+					if(pos_choose + i < 24){
+						pos_next.setPiles(pos_choose + i,pos_next.getPiles()[pos_choose + i]+1);	
+					}
+					if(pos_choose + i >=24 && i<24){
+						pos_next.setPiles(pos_choose+i-24,pos_next.getPiles()[pos_choose+i-24]+1);
+					}
+					if(i>=24 && i<36){ // skip pos_choose once and end at opponent's piles
+						pos_next.setPiles(pos_choose+i-24+ 1,pos_next.getPiles()[pos_choose+i-24+1 + 1]+1);
+					}			
+					if(i>=36){//skip pos_choose once
+						//.....complex here, working on it later
+					}
 				}
+				
 			}
+			else if(!pos_current.getIsMyTurn() && pos_choose<24 && pos_choose>=12){ // is not my turn
+				// need to complete
+			}else{
+				System.out.println("Wrong chosen position");
+			}
+			
+			pos_next.setIsMyTurn(!pos_current.getIsMyTurn());
 		}else return null;
 		return pos_next;
 	}
 	
-	private int minMaxValue(Position pos_current, boolean isMyTurn, int depth){
-		int[] tab_values = new int[12];
-		Position pos_next; 
-	    if (finalPosition(pos_current) == 96){
-	    	return 96;
-	    }
-	    if (finalPosition(pos_current) == -96){
-	    	return -96;
-	    }
-	    if (finalPosition(pos_current) == 0){
-	    	return 0;
-	    }
-	    
-	    if (depth == depthMax) {
-	    	return evaluation(pos_current, isMyTurn, depth);
-	               // the simplest evealution fucntion is the difference of the taken seeds
-	    }
-	    for(int i=0;i<12;i++){
-	               // we play the move i
-	               // WRITE function validMove(pos_current, computer_play,i)
-	               // it checks whether we can select the seeds in cell i and play (if there is no seed the function returns false)
-	    	if (validMove(pos_current, isMyTurn,i)){
-	                       // WRITE function playMove(&pos_next,pos_current, computer_play,i)
-	                       // we play the move i from pos_current and obtain the new position pos_next
-	                       playMove(pos_next,pos_current, isMyTurn,i);
-	 			// pos_next is the new current poisition and we change the player
-	                       tab_values[i]=minMaxValue(pos_next,!isMyTurn,depth+1);
-	               } else {
-				if (isMyTurn) tab_values[i]=-100;
-				else tab_values[i]=+100;
-	               }
-	       }
-	       int res;
-	       if (isMyTurn){
-	               // WRITE the code: res contains the MAX of tab_values
-	       } else {
-	               // WRITE the code: res contains the MIN of tab_values
-	       }
-	       return res;
-		
-	}
+//	private int minMaxValue(Position pos_current, boolean isMyTurn, int depth){
+//		int[] tab_values = new int[12];
+//		Position pos_next; 
+//	    if (finalPosition(pos_current) == 96){
+//	    	return 96;
+//	    }
+//	    if (finalPosition(pos_current) == -96){
+//	    	return -96;
+//	    }
+//	    if (finalPosition(pos_current) == 0){
+//	    	return 0;
+//	    }
+//	    
+//	    if (depth == depthMax) {
+//	    	return evaluation(pos_current, isMyTurn, depth);
+//	               // the simplest evealution fucntion is the difference of the taken seeds
+//	    }
+//	    for(int i=0;i<12;i++){
+//	               // we play the move i
+//	               // WRITE function validMove(pos_current, computer_play,i)
+//	               // it checks whether we can select the seeds in cell i and play (if there is no seed the function returns false)
+//	    	if (validMove(pos_current,i)){
+//	                       // WRITE function playMove(&pos_next,pos_current, computer_play,i)
+//	                       // we play the move i from pos_current and obtain the new position pos_next
+//	                       playMove(pos_next,pos_current, isMyTurn,i);
+//	 			// pos_next is the new current position and we change the player
+//	                       tab_values[i]=minMaxValue(pos_next,!isMyTurn,depth+1);
+//	               } else {
+//				if (isMyTurn) tab_values[i]=-100;
+//				else tab_values[i]=+100;
+//	               }
+//	       }
+//	       int res;
+//	       if (isMyTurn){
+//	               // WRITE the code: res contains the MAX of tab_values
+//	       } else {
+//	               // WRITE the code: res contains the MIN of tab_values
+//	       }
+//	       return res;
+//		
+//	}
 	
 	/**
 	 * returns the original piles in the same format as they are inputed
