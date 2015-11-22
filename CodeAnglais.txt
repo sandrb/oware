@@ -23,7 +23,7 @@
                // it checks whether we can select the seeds in cell i and play (if there is no seed the function returns false)
                if (validMove(pos_current, computer_play,i)){
                        // WRITE function playMove(&pos_next,pos_current, computer_play,i)
-                       // we play th emove i from pos_current and obtain the new position pos_next
+                       // we play the move i from pos_current and obtain the new position pos_next
                        playMove(&pos_next,pos_current, computer_play,i);
  			// pos_next is the new current poisition and we change the player
                        tab_values[i]=minMaxValue(&pos_next,!computer_play,depth+1,depthMax);
@@ -36,7 +36,7 @@
        if (computer_play){
                // WRITE the code: res contains the MAX of tab_values
        } else {
-               // WRITE the code: res contains the MIN of tab_valuess
+               // WRITE the code: res contains the MIN of tab_values
        }
        return res;
  }

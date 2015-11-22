@@ -4,13 +4,13 @@ https://en.wikipedia.org/wiki/Oware
 
 Project description: 
 
-
- 23 | 22 | 21 | 20 | 19 | 18 | 17 | 16 | 15 | 14 | 13 | 12   
-----|----|----|----|----|----|----|----|----|----|----|----
   0 |  1 |  2 |  3 |  4 |  5 |  6 |  7 |  8 |  9 | 10 | 11
+----|----|----|----|----|----|----|----|----|----|----|----
+ 23 | 22 | 21 | 20 | 19 | 18 | 17 | 16 | 15 | 14 | 13 | 12 
 
 pits 0 - 11 are mine and pits 12 - 23 are the opponents
 Each pit has 4 seeds at the beginning.
+Note: Move clockwise!!
 
 We implemented minmax/alpha beta algorithm and designed this program for playing OWARE game.
 
