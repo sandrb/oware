@@ -67,12 +67,6 @@ public class Game {
 		System.out.println();
 	}
 	
-	//A move is valid or not.
-	private boolean isValidMove(int[] tmpPiles){
-		//We need to find out all the invalid moves
-		//Sander: is this really needed? If we just do the move() and capture() functions right we know it's always valid.
-		return true;
-	}
 	
 	/**
 	 * Sows a certain position, spreading it's seeds over the neighbors
@@ -93,59 +87,59 @@ public class Game {
 		}
 	}
 	
-	/**
-	 * Starts capturing from a certain position
-	 * @param pos_choose: position to start capturing from, must be one from the opponent.
-	 * note: starts at the last position and goes down from there on, so if we start on 15, then follows 14, 13, etc.
-	 */
-	private void capture(int pos_choose){
-		//1st input condition: must be opponents house
-		if(pos_choose >= currentPiles.length/2 || pos_choose < 0){
-		   throw new IllegalArgumentException("Invalid input for sow, was " + pos_choose + ", should be " + (currentPiles.length/2) + " <= input < " + currentPiles.length);			
-		}
-		
-		//second input condition: must be a house that changed this turn
-		if(nextPiles[pos_choose] == currentPiles[pos_choose]){
-			throw new IllegalArgumentException("Invalid input for sow, house " + pos_choose + " was not changed by this player, hence it is not allowed to sow it.");			
-		}
-		
-		//third input condition: the seed total of the house must be 2 or three
-		if(nextPiles[pos_choose] > 3 || nextPiles[pos_choose] < 2){
-			throw new IllegalArgumentException("Invalid input for sow, house " + nextPiles + " has " + nextPiles[pos_choose] + " seeds, should be 2 or 3.");			
-		}		
-		
-		while(pos_choose >= currentPiles.length/2 && nextPiles[pos_choose] < 4 && nextPiles[pos_choose] > 1){			
-			//remove seeds
-			myScore += nextPiles[pos_choose];
-			nextPiles[pos_choose] = 0;
-			
-			//previous position
-			pos_choose--;
-		}
-	}
+//	/**
+//	 * Starts capturing from a certain position
+//	 * @param pos_choose: position to start capturing from, must be one from the opponent.
+//	 * note: starts at the last position and goes down from there on, so if we start on 15, then follows 14, 13, etc.
+//	 */
+//	private void capture(int pos_choose){
+//		//1st input condition: must be opponents house
+//		if(pos_choose >= currentPiles.length/2 || pos_choose < 0){
+//		   throw new IllegalArgumentException("Invalid input for sow, was " + pos_choose + ", should be " + (currentPiles.length/2) + " <= input < " + currentPiles.length);			
+//		}
+//		
+//		//second input condition: must be a house that changed this turn
+//		if(nextPiles[pos_choose] == currentPiles[pos_choose]){
+//			throw new IllegalArgumentException("Invalid input for sow, house " + pos_choose + " was not changed by this player, hence it is not allowed to sow it.");			
+//		}
+//		
+//		//third input condition: the seed total of the house must be 2 or three
+//		if(nextPiles[pos_choose] > 3 || nextPiles[pos_choose] < 2){
+//			throw new IllegalArgumentException("Invalid input for sow, house " + nextPiles + " has " + nextPiles[pos_choose] + " seeds, should be 2 or 3.");			
+//		}		
+//		
+//		while(pos_choose >= currentPiles.length/2 && nextPiles[pos_choose] < 4 && nextPiles[pos_choose] > 1){			
+//			//remove seeds
+//			myScore += nextPiles[pos_choose];
+//			nextPiles[pos_choose] = 0;
+//			
+//			//previous position
+//			pos_choose--;
+//		}
+//	}
 
 	
 	
-	/**
-	 * @return true, if we have won, false otherwise.
-	 */
-	private boolean hasWon(){
-		//return true if: enough points OR opponent has no more valid moves.
-		if(myScore > maxSeeds/2){
-			//at least half+1 of the seeds
-			return true;
-		}
-		
-		int opponentSeeds = 0;
-		for(int i = nextPiles.length / 2; i < nextPiles.length && opponentSeeds == 0; i++){
-			opponentSeeds += nextPiles[i];
-		}
-		if(opponentSeeds == 0){
-			return true;
-		}
-		
-		return false;
-	}
+//	/**
+//	 * @return true, if we have won, false otherwise.
+//	 */
+//	private boolean hasWon(){
+//		//return true if: enough points OR opponent has no more valid moves.
+//		if(myScore > maxSeeds/2){
+//			//at least half+1 of the seeds
+//			return true;
+//		}
+//		
+//		int opponentSeeds = 0;
+//		for(int i = nextPiles.length / 2; i < nextPiles.length && opponentSeeds == 0; i++){
+//			opponentSeeds += nextPiles[i];
+//		}
+//		if(opponentSeeds == 0){
+//			return true;
+//		}
+//		
+//		return false;
+//	}
 	private int finalPosition(Position pos_current){
 		//Ending condition1: one player took more than half of the seeds.
 		if(pos_current.getMyScore() > maxSeeds/2){
@@ -221,12 +215,12 @@ public class Game {
 	}
 	
 	//Scenario1: In a situation to capture all the seeds of other's. Not capture.
-	private void computeNextMove(){
-		//todo, step 1: sow, optional step 2: capture, step 3: check if we've won (only needed if we did 2)
-		//for the capture step i think it would be nice to do a greedy approach and get as much seeds as possible
-		
-		//option: infinite loop check?
-	}
+//	private void computeNextMove(){
+//		//todo, step 1: sow, optional step 2: capture, step 3: check if we've won (only needed if we did 2)
+//		//for the capture step i think it would be nice to do a greedy approach and get as much seeds as possible
+//		
+//		//option: infinite loop check?
+//	}
 	
 	private int evaluation(Position pos_current, boolean isMyTurn, int depth, int pos_choose){
 		//difference of the taken seeds from capture
@@ -297,52 +291,54 @@ public class Game {
 				System.out.println("Wrong chosen position");
 			}
 			
+			// Do capture and obtain the new pos_next!
+			
 			pos_next.setIsMyTurn(!pos_current.getIsMyTurn());
 		}else return null;
 		return pos_next;
 	}
 	
-//	private int minMaxValue(Position pos_current, boolean isMyTurn, int depth){
-//		int[] tab_values = new int[12];
-//		Position pos_next; 
-//	    if (finalPosition(pos_current) == 96){
-//	    	return 96;
-//	    }
-//	    if (finalPosition(pos_current) == -96){
-//	    	return -96;
-//	    }
-//	    if (finalPosition(pos_current) == 0){
-//	    	return 0;
-//	    }
-//	    
-//	    if (depth == depthMax) {
-//	    	return evaluation(pos_current, isMyTurn, depth);
-//	               // the simplest evealution fucntion is the difference of the taken seeds
-//	    }
-//	    for(int i=0;i<12;i++){
-//	               // we play the move i
-//	               // WRITE function validMove(pos_current, computer_play,i)
-//	               // it checks whether we can select the seeds in cell i and play (if there is no seed the function returns false)
-//	    	if (validMove(pos_current,i)){
-//	                       // WRITE function playMove(&pos_next,pos_current, computer_play,i)
-//	                       // we play the move i from pos_current and obtain the new position pos_next
-//	                       playMove(pos_next,pos_current, isMyTurn,i);
-//	 			// pos_next is the new current position and we change the player
-//	                       tab_values[i]=minMaxValue(pos_next,!isMyTurn,depth+1);
-//	               } else {
-//				if (isMyTurn) tab_values[i]=-100;
-//				else tab_values[i]=+100;
-//	               }
-//	       }
-//	       int res;
-//	       if (isMyTurn){
-//	               // WRITE the code: res contains the MAX of tab_values
-//	       } else {
-//	               // WRITE the code: res contains the MIN of tab_values
-//	       }
-//	       return res;
-//		
-//	}
+	private int minMaxValue(Position pos_current, boolean isMyTurn, int depth){ //isMyTurn??
+		int[] tab_values = new int[12];
+		Position pos_next; 
+	    if (finalPosition(pos_current) == 96){
+	    	return 96;
+	    }
+	    if (finalPosition(pos_current) == -96){
+	    	return -96;
+	    }
+	    if (finalPosition(pos_current) == 0){
+	    	return 0;
+	    }
+	    
+	    if (depth == depthMax) {
+	    	return evaluation(pos_current, isMyTurn, depth);
+	               // the simplest evealution fucntion is the difference of the taken seeds
+	    }
+	    for(int i=0;i<12;i++){
+	               // we play the move i
+	               // WRITE function validMove(pos_current, computer_play,i)
+	               // it checks whether we can select the seeds in cell i and play (if there is no seed the function returns false)
+	    	if (validMove(pos_current,i)){
+	                       // WRITE function playMove(&pos_next,pos_current, computer_play,i)
+	                       // we play the move i from pos_current and obtain the new position pos_next
+	    		pos_next = playMove(pos_current, isMyTurn,i);
+	 			// pos_next is the new current position and we change the player
+	            tab_values[i]=minMaxValue(pos_next,!isMyTurn,depth+1);
+	    	} else {
+				if (isMyTurn) tab_values[i]=-100;
+				else tab_values[i]=+100;
+	        }
+	      	}
+	    int res;
+		if (isMyTurn){
+		               // WRITE the code: res contains the MAX of tab_values
+		} else {
+		               // WRITE the code: res contains the MIN of tab_values
+		}
+		return res;
+		
+	}
 	
 	/**
 	 * returns the original piles in the same format as they are inputed
