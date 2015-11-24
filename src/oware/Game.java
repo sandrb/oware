@@ -13,7 +13,7 @@ public class Game {
 	int depthMax = 4; //the maximal depth
 	
 	/**
-	 * Sets the values for the current piles
+	 * Sets the values for the current piles, mostly used for testing purposes.
 	 * Input should be in the following way:
 	 * Player 1: 01 02 03 04 05 06 07 08 09 10 11 12
 	 * Player 2: 24 23 22 21 20 19 18 17 16 15 14 13
@@ -47,7 +47,35 @@ public class Game {
 		for(int i =0; i < currentPiles.length; i++){
 			currentPiles[i] = seedsPerPile;//assign number to each pile
 		}
-		System.out.println("game created");
+		System.out.println("Who starts? 0: computer, 1: player.");
+		Scanner user_input = new Scanner( System.in );
+		String input = user_input.nextLine();
+		int start = Integer.parseInt(input);
+		if(start == 1){
+			System.arraycopy(currentPiles, 0, nextPiles, 0, currentPiles.length);
+			outputPiles();
+			inputMove();
+		} else {
+			//do move
+		}
+	}
+		
+	/**
+	 * Let's the player do a move
+	 */
+	public void inputMove(){
+		String options = "";
+		for(int i = 0; i < nextPiles.length / 2; i++){//for each position
+			if(nextPiles[i] > 0){//check if it is "movable"
+				options += " " + i;//if yes, add it to the options				
+			}
+		}
+		System.out.println("Select position to sow, options are:" + options);
+		Scanner user_input = new Scanner( System.in );
+		String input = user_input.nextLine();
+		int position = Integer.parseInt(input);
+		sow(position);
+		//todo: capture seeds
 		
 	}
 	
@@ -55,12 +83,12 @@ public class Game {
 	 * returns the current piles in the same format as they are inputed
 	 */
 	public void outputPiles(){
-		System.out.print("Player 1: ");
+		System.out.print("Player 1 (input): ");
 		for(int i = 0; i < 12; i++){
 			System.out.print(nextPiles[i] + " ");
 		}
 		System.out.println();
-		System.out.print("Player 2: ");
+		System.out.print("Player 2 (computer): ");
 		for(int i = 23; i >= 12; i--){
 			System.out.print(nextPiles[i] + " ");
 		}
@@ -310,13 +338,6 @@ public class Game {
 	public static void main(String[] args) {
 		Game game = new Game();
 		game.newGame();
-		game.setPiles();
-		System.out.println("Input:");
-		game.outputOriginalPiles();
-		System.out.println("test move on place 10");
-		game.sow(10);
-		System.out.println("Output:");		
-		game.outputPiles();
 	}
 
 }
