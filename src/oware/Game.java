@@ -14,6 +14,7 @@ public class Game {
 //	boolean isMyTurn; //Next move is my turn or not
 	int depthMax = 4; //the maximal depth
 	Random randomGenerator = new Random();//Random Generator, used for testing
+	Scanner user_input = new Scanner( System.in );
 	
 	/**
 	 * Sets the values for the current piles, mostly used for testing purposes.
@@ -22,8 +23,7 @@ public class Game {
 	 * Player 2: 24 23 22 21 20 19 18 17 16 15 14 13
 	 */
 	public void setPiles(){
-		System.out.println("Player 1 piles? 12 numbers seperated by spaces.");
-		Scanner user_input = new Scanner( System.in );
+		System.out.println("Player 1 piles? 12 numbers seperated by spaces.");		
 		String input = user_input.nextLine();
 		String[] inputArray = input.split(" ");
 		for(int i = 0; i < 12; i++){
@@ -51,7 +51,6 @@ public class Game {
 			currentPiles[i] = seedsPerPile;//assign number to each pile
 		}
 		System.out.println("Who starts? 0: computer, 1: player.");
-		Scanner user_input = new Scanner( System.in );
 		String input = user_input.nextLine();
 		int start = Integer.parseInt(input);
 		System.arraycopy(currentPiles, 0, nextPiles, 0, currentPiles.length);
@@ -74,7 +73,6 @@ public class Game {
 			}
 		}
 		System.out.println("Select position to sow, options are:" + options);
-		Scanner user_input = new Scanner( System.in );
 		String input = user_input.nextLine();
 		int position = Integer.parseInt(input);
 		sow(position);
