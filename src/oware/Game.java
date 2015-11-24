@@ -1,6 +1,8 @@
 package oware;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Game {
@@ -11,6 +13,7 @@ public class Game {
 	int yourScore = 0; // The score of the opponent, initiated with 0 
 //	boolean isMyTurn; //Next move is my turn or not
 	int depthMax = 4; //the maximal depth
+	Random randomGenerator = new Random();//Random Generator, used for testing
 	
 	/**
 	 * Sets the values for the current piles, mostly used for testing purposes.
@@ -51,9 +54,9 @@ public class Game {
 		Scanner user_input = new Scanner( System.in );
 		String input = user_input.nextLine();
 		int start = Integer.parseInt(input);
+		System.arraycopy(currentPiles, 0, nextPiles, 0, currentPiles.length);
+		outputPiles();
 		if(start == 1){
-			System.arraycopy(currentPiles, 0, nextPiles, 0, currentPiles.length);
-			outputPiles();
 			inputMove();
 		} else {
 			computerMove();
@@ -77,6 +80,9 @@ public class Game {
 		sow(position);
 		//todo: capture seeds
 		System.out.println();
+		outputPiles();
+		//todo: check for win/loss
+		computerMove();
 	}
 	
 	/**
@@ -84,9 +90,20 @@ public class Game {
 	 * Just a random move for now, just for I/O testing
 	 */
 	public void computerMove(){
-		
-		
+		ArrayList<Integer> options = new ArrayList<Integer>();
+		for(int i = 0; i < nextPiles.length / 2; i++){//for each position
+			if(nextPiles[i + nextPiles.length / 2] > 0){//check if it is "movable"
+				options.add(i + nextPiles.length / 2);
+			}
+		}
+		//for testing: sow a random integer from the options
+		int sowValue = options.get(randomGenerator.nextInt(options.size()));
+		sow(sowValue);
+		System.out.println("Computer sowed position " + sowValue);
+		//todo: capture seeds
 		outputPiles();
+		inputMove();
+		//todo: check for win/loss
 	}
 	
 	/**
@@ -103,19 +120,20 @@ public class Game {
 			System.out.print(nextPiles[i] + " ");
 		}
 		System.out.println();
+		System.out.println();
 	}
 	
 	
 	/**
 	 * Sows a certain position, spreading it's seeds over the neighbors
-	 * @param pos_choose: position that is sowed, must be one of our own positions.
+	 * @param pos_choose: position that is sowed.
 	 */
 	private void sow(int pos_choose){
-		if(pos_choose >= currentPiles.length/2 || pos_choose < 0){
+		if(pos_choose >= currentPiles.length || pos_choose < 0){
 		   throw new IllegalArgumentException("Invalid input for sow, was " + pos_choose + ", should be 0 <= input < " + (currentPiles.length/2));			
 		}
 		
-		int i = 1;
+		int i = 0;
 		while(nextPiles[pos_choose] > 0){
 			if((pos_choose+i+1) % currentPiles.length != pos_choose){//skip pos_choose
 				nextPiles[(pos_choose+i+1) % currentPiles.length]++;//place one seed
