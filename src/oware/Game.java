@@ -56,7 +56,7 @@ public class Game {
 			outputPiles();
 			inputMove();
 		} else {
-			//do move
+			computerMove();
 		}
 	}
 		
@@ -76,7 +76,17 @@ public class Game {
 		int position = Integer.parseInt(input);
 		sow(position);
 		//todo: capture seeds
+		System.out.println();
+	}
+	
+	/**
+	 * Does a computer move
+	 * Just a random move for now, just for I/O testing
+	 */
+	public void computerMove(){
 		
+		
+		outputPiles();
 	}
 	
 	/**
