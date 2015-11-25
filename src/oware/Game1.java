@@ -12,7 +12,11 @@ public class Game1 {
 	boolean isMyTurn; //Next move is my turn or not
 	int depthMax = 4; //the maximal depth
 	Scanner user_input = new Scanner( System.in );
+<<<<<<< Updated upstream
 	boolean testMode = false;//if testmode enabled, we use random variables instead of user input
+=======
+	boolean areWeFirstPlayer;
+>>>>>>> Stashed changes
 	
 	public static void main(String[] args) {
 		Game1 game = new Game1();
@@ -22,7 +26,7 @@ public class Game1 {
 		for(int i = 0; i < currentPiles.length; i++){
 			currentPiles[i] = maxSeeds/currentPiles.length;
 		}
-		System.out.println("Who starts? 0: We, 1: Opponent.");
+		System.out.println("Who will be the first player? 0: We, 1: Opponent.");
 		String input = user_input.nextLine();
 		int start = Integer.parseInt(input);
 		System.arraycopy(currentPiles, 0, nextPiles, 0, currentPiles.length);
@@ -32,7 +36,9 @@ public class Game1 {
 		yourScore = 0;
 		
 		if(start ==1){ //Opponent start first
+			areWeFirstPlayer = false;
 			opponentMove();		
+<<<<<<< Updated upstream
 		}else if(start == 2){//We start first
 			myMove();
 		}else if(start == 7){//Opponent start first, testmode enabled
@@ -41,19 +47,39 @@ public class Game1 {
 		} else if(start == 8){//We start first, testmode enabled
 			testMode = true;
 			myMove();			
+=======
+		}if(start ==0){//We start first
+			areWeFirstPlayer = true;
+			myMove();
+		}else{
+			System.out.println("Should input 0 or 1");
+>>>>>>> Stashed changes
 		}
 	}
 	public void opponentMove(){
 		isMyTurn = false;
-		ArrayList<Integer> Options = options();
-		System.out.println("Please input the opponent's position (options:" + optionsToString(Options) + ")");
+//		ArrayList<Integer> Options = options();
+//		System.out.println("Please input the opponent's position (options:" + optionsToString(Options) + ")");
+		System.out.println("Please input the opponent's position");
 		String input = user_input.nextLine();
 		int position = Integer.parseInt(input);
-		while(position<12 || position>=24 || currentPiles[position] == 0){
-			System.out.println("position should between 12 and 23 and contain seeds");
-			input = user_input.nextLine();
-			position = Integer.parseInt(input);
+		if(!areWeFirstPlayer){// opponent is the first player
+			while(position<1 || position>12 || currentPiles[position+11] == 0){
+				System.out.println("position should between 1 and 12 and contain seeds");
+				input = user_input.nextLine();
+				position = Integer.parseInt(input);
+			}
+			position = position+ 11;
+			
+		}else{ //we are the first player
+			while(position<13 || position>24 || currentPiles[position-1] == 0){
+				System.out.println("position should between 13 and 24 and contain seeds");
+				input = user_input.nextLine();
+				position = Integer.parseInt(input);
+			}
+			position = position- 1;
 		}
+		
 		int lastChanged = sow(position);
 		capture(lastChanged);//capture seeds if needed
 		
@@ -99,7 +125,12 @@ public class Game1 {
 		int lastChanged = sow(suggestPos);
 		capture(lastChanged);//capture seeds if needed
 		
-		System.out.println("suggest position is "+suggestPos+". After this");
+		if(!areWeFirstPlayer){
+			System.out.println("suggest position is "+ (suggestPos+13) +". After this");
+		}else{
+			System.out.println("suggest position is "+ (suggestPos+1) +". After this");
+		}
+		
 		System.out.println();
 		outputPiles();
 		
@@ -221,15 +252,28 @@ public class Game1 {
 		}
 	}
 	public void outputPiles(){
-		System.out.print("Me:       ");
-		for(int i = 0; i < 12; i++){
-			System.out.print(nextPiles[i] + " ");
+		if(areWeFirstPlayer){
+			System.out.print("Me:       ");
+			for(int i = 0; i < 12; i++){
+				System.out.print(nextPiles[i] + " ");
+			}
+			System.out.println();
+			System.out.print("Opponent: ");
+			for(int i = 23; i >= 12; i--){
+				System.out.print(nextPiles[i] + " ");
+			}
+		}else{
+			System.out.print("Opponent: ");
+			for(int i = 12; i <24; i++){
+				System.out.print(nextPiles[i] + " ");
+			}			
+			System.out.println();
+			System.out.print("Me:       ");
+			for(int i = 11; i >=0; i--){
+				System.out.print(nextPiles[i] + " ");
+			}
 		}
-		System.out.println();
-		System.out.print("Opponent: ");
-		for(int i = 23; i >= 12; i--){
-			System.out.print(nextPiles[i] + " ");
-		}
+		
 		System.out.println();
 		System.out.println("My Score: " + myScore + ", Opponent's Score: " + yourScore);
 		System.out.println();
