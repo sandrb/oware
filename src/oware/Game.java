@@ -85,9 +85,7 @@ public class Game {
 		System.out.println();
 		outputPiles();
 
-		if(hasWonLost()){
-			askNewGame();
-		}else{
+		if(!hasWonLost()){//no winner yet, continue
 			computerMove();			
 		}		
 	}
@@ -110,9 +108,7 @@ public class Game {
 		capture(lastChanged);//capture seeds if needed
 		System.out.println("Computer sowed position " + position);
 		outputPiles();
-		if(hasWonLost()){
-			askNewGame();
-		}else{
+		if(!hasWonLost()){//no winner yet, continue
 			inputMove();			
 		}		
 	}
@@ -226,14 +222,6 @@ public class Game {
 		}else{
 			//game has not yet finished
 			return false;
-		}
-	}
-	
-	private void askNewGame(){
-		System.out.println("give input Y to start a new game.");
-		String input = user_input.nextLine();
-		if(input == "y"){
-			newGame();
 		}
 	}
 	
