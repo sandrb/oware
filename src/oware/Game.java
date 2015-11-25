@@ -399,12 +399,32 @@ public class Game {
 	    }
 	    
 	    if (depth == depthMax) {
-	    	int result = -100;
-	    	for(int i = 0; i < currentPiles.length; i++){
-	    		result = Math.max(evaluation(pos_current, i),result);
+	    	// current is my turn
+	    	if(pos_current.getIsMyTurn()){ 
+	    		int result = evaluation(pos_current, 0);
+	    		if(depthMax%2 == 0){ //bottom is also my turn // choose the max 
+	    			for(int i = 0; i < pos_current.getPiles().length/2; i++){
+			    		result = Math.max(evaluation(pos_current, i),result);
+			    	}
+	    		}else{ ////bottom is not my turn // choose the min
+	    			for(int i = 0; i < pos_current.getPiles().length/2; i++){
+			    		result = Math.min(evaluation(pos_current, i),result);
+			    	}
+	    		}
+	    		return result;
+	    	}else{// current is not my turn    		
+	    		int result = evaluation(pos_current, pos_current.getPiles().length/2);
+	    		if(depthMax%2 == 0){ //bottom is also not my turn // choose the min 
+	    			for(int i = pos_current.getPiles().length/2; i < pos_current.getPiles().length; i++){
+			    		result = Math.min(evaluation(pos_current, i),result);
+			    	}
+	    		}else{ //bottom is my turn // choose the max
+	    			for(int i = pos_current.getPiles().length/2; i < pos_current.getPiles().length; i++){
+			    		result = Math.max(evaluation(pos_current, i),result);
+			    	}
+	    		}
+	    		return result;
 	    	}
-	    	return result;
-	               // the simplest evealution fucntion is the difference of the taken seeds
 	    }
 	    for(int i=0;i<12;i++){
 	               // we play the move i
@@ -421,11 +441,15 @@ public class Game {
 				else tab_values[i]=+100;
 	        }
 	      	}
-	    int res;
+	    int res = tab_values[0];
 		if (pos_current.getIsMyTurn()){
-		               // WRITE the code: res contains the MAX of tab_values
+			for(int i=0;i<12;i++){// WRITE the code: res contains the MAX of tab_values
+				res = Math.max(tab_values[i], res);
+			}
 		} else {
-		               // WRITE the code: res contains the MIN of tab_values
+			for(int i=0;i<12;i++){// WRITE the code: res contains the MIN of tab_values
+				res = Math.min(tab_values[i], res);
+			}        
 		}
 		return res;
 		
