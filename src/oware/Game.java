@@ -81,7 +81,8 @@ public class Game {
 		int position = Integer.parseInt(input);
 		int lastChanged = sow(position);
 		//todo: capture seeds
-		capture(false,lastChanged,false);//capture seeds if needed
+		capture(lastChanged);//capture seeds if needed
+		
 		System.out.println();
 		outputPiles();
 		//todo: check for win/loss
@@ -152,19 +153,17 @@ public class Game {
 	
 	/**
 	 * Captures the seeds after a turn
-	 * @param calculate: if set to true, we just calculate the return value and not actually capture
+	 * @param lastChanged: pile lastly increased
 	 */
-	private void capture(boolean calculate, int lastChanged, boolean isProgramTurn){
-		if(!calculate){
-			//no calculation, actually capturing seeds now.
-			if(nextPiles[lastChanged] == 2 || nextPiles[lastChanged] == 3)
-			if(isProgramTurn){
-				
-			}else{
+	private void capture(int lastChanged){
+		//no calculation, actually capturing seeds now.
+		
+		if(isProgramTurn){
+			while(nextPiles[lastChanged] == 2 || nextPiles[lastChanged] == 3){
 				
 			}
-		} else {
-			//hypothetical case, just return amount of seeds captured
+		}else{
+			
 		}
 	}
 	
