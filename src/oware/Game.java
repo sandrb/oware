@@ -193,7 +193,7 @@ public class Game {
 			}
 		}else{
 			//the turn of the user input
-			while(nextPiles[lastChanged] >= 2 && nextPiles[lastChanged] <= 3 && lastChanged >= nextPiles.length/2){
+			while(lastChanged >= nextPiles.length/2 && nextPiles[lastChanged] >= 2 && nextPiles[lastChanged] <= 3){
 				//continue as long as we are on the programs side and the number of seeds is 2 or 3
 				inputScore += nextPiles[lastChanged];
 				nextPiles[lastChanged] = 0;
