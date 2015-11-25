@@ -155,6 +155,12 @@ public class Game {
 		return lastChanged;
 	}
 	
+	/**
+	 * Calculates the sow for that position
+	 * @param pos_current: the current position the game is in
+	 * @param pos_choose: the position chosen
+	 * @return the last position that is altered by this sow
+	 */
 	private Position sowForCal(Position pos_current,int pos_choose){
 		Position pos_next = new Position();
 		pos_next.setPiles(pos_current.getPiles()); // copy pos_current to pos_next
