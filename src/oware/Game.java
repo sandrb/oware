@@ -67,7 +67,6 @@ public class Game {
 	
 	/**
 	 * Does a computer move
-	 * Just a random move for now, just for I/O testing
 	 */
 	public void computerMove(){
 		isProgramTurn = true;
