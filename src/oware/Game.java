@@ -1,7 +1,6 @@
 package oware;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -15,31 +14,6 @@ public class Game {
 	int depthMax = 4; //the maximal depth
 	Random randomGenerator = new Random();//Random Generator, used for testing
 	Scanner user_input = new Scanner( System.in );
-	
-	/**
-	 * Sets the values for the current piles, mostly used for testing purposes.
-	 * Input should be in the following way:
-	 * Player 1: 01 02 03 04 05 06 07 08 09 10 11 12
-	 * Player 2: 24 23 22 21 20 19 18 17 16 15 14 13
-	 */
-	public void setPiles(){
-		System.out.println("Player 1 piles? 12 numbers seperated by spaces.");		
-		String input = user_input.nextLine();
-		String[] inputArray = input.split(" ");
-		for(int i = 0; i < 12; i++){
-			currentPiles[i] = Integer.parseInt(inputArray[i]);
-		}	
-
-		System.out.println("Player 2 piles? 12 numbers seperated by spaces.");
-		input = user_input.nextLine();
-		inputArray = input.split(" ");
-		for(int i = 0; i < 12; i++){
-			currentPiles[12 + i] = Integer.parseInt(inputArray[i]);
-			//Alternatively: replace "12 + i" with "23 - i" if you want to fill up in the same way as is displayed.
-		}
-		
-		System.arraycopy(currentPiles, 0, nextPiles, 0, currentPiles.length);
-	}
 	
 	/**
 	 * Initializes a new game with an equal number of seeds per pile.
@@ -455,34 +429,6 @@ public class Game {
 		}
 		return res;
 		
-	}
-	
-	/**
-	 * returns the original piles in the same format as they are inputed
-	 */
-	public void outputOriginalPiles(){
-		System.out.print("Player 1: ");
-		for(int i = 0; i < 12; i++){
-			System.out.print(currentPiles[i] + " ");
-		}
-		System.out.println();
-		System.out.print("Player 2: ");
-		for(int i = 23; i >= 12; i--){
-			System.out.print(currentPiles[i] + " ");
-		}
-		System.out.println();
-	}
-	
-	/**
-	 * returns the changes we made
-	 */
-	public void outputChanges(){
-		for(int i = 0; i < nextPiles.length; i++){
-			if(nextPiles[i] != currentPiles[i]){
-				System.out.print(i + " " + nextPiles[i]);				
-			}
-		}
-		System.out.println();
 	}
 
 	public static void main(String[] args) {
