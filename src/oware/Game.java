@@ -439,15 +439,18 @@ public class Game {
 		Position pos_next; 
 	    if (finalPosition(pos_current) == 96){
 	    	valuePosition[0] = 96;
-//	    	return 96;
+	    	valuePosition[1] = -1;
+	    	return valuePosition;
 	    }
 	    if (finalPosition(pos_current) == -96){
 	    	valuePosition[0] = -96;
-//	    	return -96;
+	    	valuePosition[1] = -1;
+	    	return valuePosition;
 	    }
 	    if (finalPosition(pos_current) == 0){
 	    	valuePosition[0] = 0;
-//	    	return 0;
+	    	valuePosition[1] = -1;
+	    	return valuePosition;
 	    }
 	    
 	    if (depth == depthMax) {
@@ -464,7 +467,9 @@ public class Game {
 			    	}
 	    		}
 	    		valuePosition[0] = result;
-//	    		return result;
+	    		valuePosition[1] = -1;
+		    	return valuePosition;
+
 	    	}else{// current is not my turn    		
 	    		int result = evaluation(pos_current, pos_current.getPiles().length/2);
 	    		if(depthMax%2 == 0){ //bottom is also not my turn // choose the min 
@@ -477,7 +482,8 @@ public class Game {
 			    	}
 	    		}
 	    		valuePosition[0] = result;
-//	    		return result;
+	    		valuePosition[1] = -1;
+		    	return valuePosition;
 	    	}
 	    }
 	    for(int i=0;i<12;i++){
@@ -507,7 +513,7 @@ public class Game {
 		}
 		valuePosition[0] = res;
 		for(int i=0;i<12;i++){
-			if(res==i){
+			if(res==tab_values[i]){
 				valuePosition[1] = i;
 			}
 		}
