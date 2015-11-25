@@ -166,24 +166,53 @@ public class Game {
 	 */
 	private void capture(int lastChanged){
 		//no calculation, actually capturing seeds now.		
+		boolean doCapture = true;//set to false if it is not needed.
+		int sumRemaining = 0;//sum of all the seeds remaining on the opponents side
 		if(isProgramTurn){
 			//the turn of the code
-			while(lastChanged >= 0 && lastChanged < nextPiles.length/2 && nextPiles[lastChanged] >= 2 && nextPiles[lastChanged] <= 3){
-				//continue as long as we are on users side and the number of seeds is 2 or 3
-				programScore += nextPiles[lastChanged];
-				nextPiles[lastChanged] = 0;	
-				lastChanged--;
+			for(int i = 0; i < nextPiles.length/2 && sumRemaining == 0; i++){
+				//get sum of all positions NOT seeded (only need to know if it's more than 0)
+				if(i > lastChanged){
+					sumRemaining += nextPiles[i];
+				}else if(nextPiles[i] != 2 && nextPiles[i] != 3){
+					sumRemaining += nextPiles[i];
+				}
 			}
-			//todo: check if we didn't capture all the seeds
+			if(sumRemaining == 0){
+				// if a move would capture all of an opponent's seeds, the capture is forfeited since this would prevent the opponent from continuing the game, and the seeds are instead left on the board
+				doCapture = false;
+			}
+			
+			if(doCapture){
+				while(lastChanged >= 0 && lastChanged < nextPiles.length/2 && nextPiles[lastChanged] >= 2 && nextPiles[lastChanged] <= 3){
+					//continue as long as we are on users side and the number of seeds is 2 or 3
+					programScore += nextPiles[lastChanged];
+					nextPiles[lastChanged] = 0;	
+					lastChanged--;
+				}				
+			}
 		}else{
 			//the turn of the user input
-			while(lastChanged >= nextPiles.length/2 && nextPiles[lastChanged] >= 2 && nextPiles[lastChanged] <= 3){
-				//continue as long as we are on the programs side and the number of seeds is 2 or 3
-				inputScore += nextPiles[lastChanged];
-				nextPiles[lastChanged] = 0;
-				lastChanged--;				
-			}	
-			//todo: check if we didn't capture all the seeds		
+			for(int i = nextPiles.length/2; i < nextPiles.length && sumRemaining == 0; i++){
+				//get sum of all positions NOT seeded (only need to know if it's more than 0)
+				if(i > lastChanged){
+					sumRemaining += nextPiles[i];
+				}else if(nextPiles[i] != 2 && nextPiles[i] != 3){
+					sumRemaining += nextPiles[i];
+				}
+			}
+			if(sumRemaining == 0){
+				// if a move would capture all of an opponent's seeds, the capture is forfeited since this would prevent the opponent from continuing the game, and the seeds are instead left on the board
+				doCapture = false;
+			}
+			if(doCapture){
+				while(lastChanged >= nextPiles.length/2 && nextPiles[lastChanged] >= 2 && nextPiles[lastChanged] <= 3){
+					//continue as long as we are on the programs side and the number of seeds is 2 or 3
+					inputScore += nextPiles[lastChanged];
+					nextPiles[lastChanged] = 0;
+					lastChanged--;				
+				}					
+			}		
 		}
 	}
 	
