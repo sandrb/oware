@@ -12,6 +12,7 @@ public class Game1 {
 	boolean isMyTurn; //Next move is my turn or not
 	int depthMax = 4; //the maximal depth
 	Scanner user_input = new Scanner( System.in );
+	boolean testMode = false;//if testmode enabled, we use random variables instead of user input
 	
 	public static void main(String[] args) {
 		Game1 game = new Game1();
@@ -32,8 +33,14 @@ public class Game1 {
 		
 		if(start ==1){ //Opponent start first
 			opponentMove();		
-		}else{//We start first
+		}else if(start == 2){//We start first
 			myMove();
+		}else if(start == 7){//Opponent start first, testmode enabled
+			testMode = true;
+			opponentMove();		
+		} else if(start == 8){//We start first, testmode enabled
+			testMode = true;
+			myMove();			
 		}
 	}
 	public void opponentMove(){
