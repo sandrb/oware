@@ -77,7 +77,7 @@ public class Game {
 			}
 		}
 		//for testing: sow a random integer from the options
-		int position = options.get(randomGenerator.nextInt(options.size()));
+		int position = computeNextMove();
 		
 		int lastChanged = sow(position);
 		capture(lastChanged);//capture seeds if needed
