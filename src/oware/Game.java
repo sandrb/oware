@@ -156,17 +156,19 @@ public class Game {
 		Position pos_next = new Position();
 		pos_next.setPiles(pos_current.getPiles()); // copy pos_current to pos_next
 		
-		int lastChanged = 0;
-		int i = 0;
-		while(nextPiles[pos_choose] > 0){
-			if((pos_choose+i+1) % currentPiles.length != pos_choose){//skip pos_choose
-				nextPiles[(pos_choose+i+1) % currentPiles.length]++;//place one seed
-				lastChanged = (pos_choose+i+1) % currentPiles.length;
-				nextPiles[pos_choose]--;//remove one seed				
-			}
-			i++;//go on to the next position
+		if(pos_current.getIsMyTurn() && pos_choose<12 && pos_choose>=0){ // is my turn
+			pos_next.setPiles(pos_choose,0);
+			
+			
 		}
-		return lastChanged;
+		else if(!pos_current.getIsMyTurn() && pos_choose<24 && pos_choose>=12){ // is not my turn
+			// need to complete
+		}else{
+			System.out.println("Wrong chosen position");
+		}
+		
+		pos_next.setIsMyTurn(!pos_current.getIsMyTurn());
+		return pos_next;
 	}
 	
 	/**
