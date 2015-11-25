@@ -89,6 +89,21 @@ public class Game {
 	}
 	
 	/**
+	 * Compute the next move according to current position
+	 */
+	public int computeNextMove(){
+		Position pos_current = new Position();
+		pos_current.setPiles(currentPiles);
+		pos_current.setIsMyTurn(isProgramTurn);
+		pos_current.setMyScore(programScore);
+		pos_current.setYourScore(inputScore);
+		int[] valuePosition = new int[2];
+		valuePosition = minMaxValue(pos_current,0);
+		return valuePosition[1];
+	}
+	
+	
+	/**
 	 * returns the current piles in the same format as they are inputed
 	 */
 	public void outputPiles(){
@@ -389,17 +404,21 @@ public class Game {
 		return pos_next;
 	}
 	
-	private int minMaxValue(Position pos_current, int depth){ 
+	private int[] minMaxValue(Position pos_current, int depth){ 
+		int[] valuePosition = new int[2];
 		int[] tab_values = new int[12];
 		Position pos_next; 
 	    if (finalPosition(pos_current) == 96){
-	    	return 96;
+	    	valuePosition[0] = 96;
+//	    	return 96;
 	    }
 	    if (finalPosition(pos_current) == -96){
-	    	return -96;
+	    	valuePosition[0] = -96;
+//	    	return -96;
 	    }
 	    if (finalPosition(pos_current) == 0){
-	    	return 0;
+	    	valuePosition[0] = 0;
+//	    	return 0;
 	    }
 	    
 	    if (depth == depthMax) {
@@ -415,7 +434,8 @@ public class Game {
 			    		result = Math.min(evaluation(pos_current, i),result);
 			    	}
 	    		}
-	    		return result;
+	    		valuePosition[0] = result;
+//	    		return result;
 	    	}else{// current is not my turn    		
 	    		int result = evaluation(pos_current, pos_current.getPiles().length/2);
 	    		if(depthMax%2 == 0){ //bottom is also not my turn // choose the min 
@@ -427,7 +447,8 @@ public class Game {
 			    		result = Math.max(evaluation(pos_current, i),result);
 			    	}
 	    		}
-	    		return result;
+	    		valuePosition[0] = result;
+//	    		return result;
 	    	}
 	    }
 	    for(int i=0;i<12;i++){
@@ -439,7 +460,7 @@ public class Game {
 	                       // we play the move i from pos_current and obtain the new position pos_next
 	    		pos_next = playMove(pos_current,i);
 	 			// pos_next is the new current position and we change the player
-	            tab_values[i]=minMaxValue(pos_next,depth+1);
+	            tab_values[i]=minMaxValue(pos_next,depth+1)[0];
 	    	} else {
 				if (pos_current.getIsMyTurn()) tab_values[i]=-100;
 				else tab_values[i]=+100;
@@ -455,7 +476,13 @@ public class Game {
 				res = Math.min(tab_values[i], res);
 			}        
 		}
-		return res;
+		valuePosition[0] = res;
+		for(int i=0;i<12;i++){
+			if(res==i){
+				valuePosition[1] = i;
+			}
+		}
+		return valuePosition;
 	}
 
 	public static void main(String[] args) {
