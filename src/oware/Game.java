@@ -84,8 +84,12 @@ public class Game {
 		
 		System.out.println();
 		outputPiles();
-		//todo: check for win/loss
-		computerMove();
+
+		if(hasWonLost()){
+			askNewGame();
+		}else{
+			computerMove();			
+		}		
 	}
 	
 	/**
@@ -105,10 +109,12 @@ public class Game {
 		int lastChanged = sow(position);
 		capture(lastChanged);//capture seeds if needed
 		System.out.println("Computer sowed position " + position);
-		//todo: capture seeds
 		outputPiles();
-		inputMove();
-		//todo: check for win/loss
+		if(hasWonLost()){
+			askNewGame();
+		}else{
+			inputMove();			
+		}		
 	}
 	
 	/**
@@ -174,6 +180,41 @@ public class Game {
 				nextPiles[lastChanged] = 0;
 				lastChanged--;				
 			}			
+		}
+	}
+	
+	private boolean hasWonLost(){
+		//create a new position
+		Position currentPosition = new Position();
+		currentPosition.setPiles(nextPiles);
+		currentPosition.setIsMyTurn(isProgramTurn);
+		currentPosition.setMyScore(programScore);
+		currentPosition.setYourScore(inputScore);
+		
+		//get the result for this position
+		int result = finalPosition(currentPosition);
+		if(result != -1){
+			//game has finished, output result
+			if(result == 96){
+				System.out.println("The program has won, user input has lost.");
+			}else if(result == -96){
+				System.out.println("The user input has won, program has lost.");				
+			}else{
+				//result == 0
+				System.out.println("The game resulted in a draw.");
+			}
+			return true;
+		}else{
+			//game has not yet finished
+			return false;
+		}
+	}
+	
+	private void askNewGame(){
+		System.out.println("give input Y to start a new game.");
+		String input = user_input.nextLine();
+		if(input == "y"){
+			newGame();
 		}
 	}
 	
