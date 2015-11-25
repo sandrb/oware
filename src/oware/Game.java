@@ -159,22 +159,26 @@ public class Game {
 	 * Calculates the sow for that position
 	 * @param pos_current: the current position the game is in
 	 * @param pos_choose: the position chosen
-	 * @return the last position that is altered by this sow
+	 * @return the new position of the game after this sow
 	 */
 	private Position sowForCal(Position pos_current,int pos_choose){
+		if(pos_choose >= currentPiles.length || pos_choose < 0){
+		   throw new IllegalArgumentException("Invalid input for sow, was " + pos_choose + ", should be 0 <= input < " + (currentPiles.length/2));			
+		}		
+		
 		Position pos_next = new Position();
 		pos_next.setPiles(pos_current.getPiles()); // copy pos_current to pos_next
 		int lastChanged = 0;
+		int i = 0;
 		
-		if(pos_current.getIsMyTurn() && pos_choose<12 && pos_choose>=0){ // is my turn
-			pos_next.setPiles(pos_choose,0);
+		while(pos_next.getPiles()[pos_choose] > 0){
+			if((pos_choose+i+1) % currentPiles.length != pos_choose){//skip pos_choose
+				pos_next.getPiles()[(pos_choose+i+1) % currentPiles.length]++;//place one seed
+				lastChanged = (pos_choose+i+1) % currentPiles.length;
+				pos_next.getPiles()[pos_choose]--;//remove one seed				
+			}
+			i++;//go on to the next position
 			
-			
-		}
-		else if(!pos_current.getIsMyTurn() && pos_choose<24 && pos_choose>=12){ // is not my turn
-			// need to complete
-		}else{
-			System.out.println("Wrong chosen position");
 		}
 		
 		pos_next.setLastChanged(lastChanged);
