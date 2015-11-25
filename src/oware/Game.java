@@ -60,6 +60,7 @@ public class Game {
 		outputPiles();
 
 		if(!hasWonLost()){//no winner yet, continue
+			System.arraycopy(nextPiles, 0, nextPiles, 0, currentPiles.length);//nextpiles become currentpiles
 			computerMove();			
 		}		
 	}
@@ -84,6 +85,7 @@ public class Game {
 		System.out.println("Computer sowed position " + position);
 		outputPiles();
 		if(!hasWonLost()){//no winner yet, continue
+			System.arraycopy(nextPiles, 0, nextPiles, 0, currentPiles.length);//nextpiles become currentpiles
 			inputMove();			
 		}		
 	}
