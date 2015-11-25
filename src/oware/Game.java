@@ -80,7 +80,6 @@ public class Game {
 		String input = user_input.nextLine();
 		int position = Integer.parseInt(input);
 		int lastChanged = sow(position);
-		//todo: capture seeds
 		capture(lastChanged);//capture seeds if needed
 		
 		System.out.println();
@@ -102,9 +101,10 @@ public class Game {
 			}
 		}
 		//for testing: sow a random integer from the options
-		int sowValue = options.get(randomGenerator.nextInt(options.size()));
-		sow(sowValue);
-		System.out.println("Computer sowed position " + sowValue);
+		int position = options.get(randomGenerator.nextInt(options.size()));
+		int lastChanged = sow(position);
+		capture(lastChanged);//capture seeds if needed
+		System.out.println("Computer sowed position " + position);
 		//todo: capture seeds
 		outputPiles();
 		inputMove();
@@ -115,16 +115,17 @@ public class Game {
 	 * returns the current piles in the same format as they are inputed
 	 */
 	public void outputPiles(){
-		System.out.print("Player 1 (input): ");
+		System.out.print("Player 1 (u input): ");
 		for(int i = 0; i < 12; i++){
 			System.out.print(nextPiles[i] + " ");
 		}
 		System.out.println();
-		System.out.print("Player 2 (computer): ");
+		System.out.print("Player 2 (program): ");
 		for(int i = 23; i >= 12; i--){
 			System.out.print(nextPiles[i] + " ");
 		}
 		System.out.println();
+		System.out.println("Program: " + programScore + ", input: " + inputScore);
 		System.out.println();
 	}
 	
@@ -156,14 +157,23 @@ public class Game {
 	 * @param lastChanged: pile lastly increased
 	 */
 	private void capture(int lastChanged){
-		//no calculation, actually capturing seeds now.
-		
+		//no calculation, actually capturing seeds now.		
 		if(isProgramTurn){
-			while(nextPiles[lastChanged] == 2 || nextPiles[lastChanged] == 3){
-				
+			//the turn of the code
+			while(nextPiles[lastChanged] >= 2 && nextPiles[lastChanged] <= 3 && lastChanged >= nextPiles.length/2){
+				//continue as long as we are on the opponents side and the number of seeds is 2 or 3
+				programScore = nextPiles[lastChanged];
+				nextPiles[lastChanged] = 0;	
+				lastChanged--;
 			}
 		}else{
-			
+			//the turn of the user input
+			while(nextPiles[lastChanged] >= 2 && nextPiles[lastChanged] <= 3 && lastChanged >= 0){
+				//continue as long as we are on the opponents side and the number of seeds is 2 or 3
+				inputScore = nextPiles[lastChanged];
+				nextPiles[lastChanged] = 0;
+				lastChanged--;				
+			}			
 		}
 	}
 	
