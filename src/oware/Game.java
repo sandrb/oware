@@ -202,7 +202,6 @@ public class Game {
 		}
 	}
 	
-<<<<<<< HEAD
 	private boolean hasWonLost(){
 		//create a new position
 		Position currentPosition = new Position();
@@ -236,14 +235,14 @@ public class Game {
 		if(input == "y"){
 			newGame();
 		}
-=======
+	}
+	
 	private int evaluation(Position pos_current, int pos_choose){
 		//difference of the taken seeds from capture
 		Position pos_next = new Position();
 		pos_next = sowForCal(pos_current,pos_choose); // just sow 
-		int num = 
+		int num = -1;
 		return 1;
->>>>>>> c90306934b6f1903b0feee7027e225f473968969
 	}
 	
 	private int finalPosition(Position pos_current){
