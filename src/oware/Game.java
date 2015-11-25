@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class Game {
 	int maxSeeds = 96; //initial and maximum number of seeds
-	int[] currentPiles = new int[24]; //values represents the current piles, piles 0 - 11 are ours and piles 12 - 23 are the opponents
+	int[] currentPiles = new int[24]; //values represents the current piles, piles 0 - 11 are the users and piles 12 - 23 are the programs
 	int[] nextPiles = new int[currentPiles.length]; //value represents the piles of next move.
 	int programScore; // The score of the program
 	int inputScore; // The score of the input
