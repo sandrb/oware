@@ -174,6 +174,7 @@ public class Game {
 				nextPiles[lastChanged] = 0;	
 				lastChanged--;
 			}
+			//todo: check if we didn't capture all the seeds
 		}else{
 			//the turn of the user input
 			while(lastChanged >= nextPiles.length/2 && nextPiles[lastChanged] >= 2 && nextPiles[lastChanged] <= 3){
@@ -181,10 +182,15 @@ public class Game {
 				inputScore += nextPiles[lastChanged];
 				nextPiles[lastChanged] = 0;
 				lastChanged--;				
-			}			
+			}	
+			//todo: check if we didn't capture all the seeds		
 		}
 	}
 	
+	/**
+	 * Checks if the game has been won or lost
+	 * @return true if the game is finished, false otherwise
+	 */
 	private boolean hasWonLost(){
 		//create a new position
 		Position currentPosition = new Position();
