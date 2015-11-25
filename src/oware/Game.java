@@ -400,7 +400,7 @@ public class Game {
 		return pos_next;
 	}
 	
-	private int minMaxValue(Position pos_current, boolean isMyTurn, int depth){ //isMyTurn??
+	private int minMaxValue(Position pos_current, int depth){ 
 		int[] tab_values = new int[12];
 		Position pos_next; 
 	    if (finalPosition(pos_current) == 96){
@@ -414,7 +414,7 @@ public class Game {
 	    }
 	    
 	    if (depth == depthMax) {
-	    	return evaluation(pos_current, isMyTurn, depth);
+	    	return evaluation(pos_current, 1);
 	               // the simplest evealution fucntion is the difference of the taken seeds
 	    }
 	    for(int i=0;i<12;i++){
@@ -426,14 +426,14 @@ public class Game {
 	                       // we play the move i from pos_current and obtain the new position pos_next
 	    		pos_next = playMove(pos_current,i);
 	 			// pos_next is the new current position and we change the player
-	            tab_values[i]=minMaxValue(pos_next,!isMyTurn,depth+1);
+	            tab_values[i]=minMaxValue(pos_next,depth+1);
 	    	} else {
-				if (isMyTurn) tab_values[i]=-100;
+				if (pos_current.getIsMyTurn()) tab_values[i]=-100;
 				else tab_values[i]=+100;
 	        }
 	      	}
 	    int res;
-		if (isMyTurn){
+		if (pos_current.getIsMyTurn()){
 		               // WRITE the code: res contains the MAX of tab_values
 		} else {
 		               // WRITE the code: res contains the MIN of tab_values
