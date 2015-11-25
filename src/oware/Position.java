@@ -5,6 +5,7 @@ public class Position {
 	int _myScore = 0; // My score, initiated with 0
 	int _yourScore = 0; // The score of the opponent, initiated with 0 
 	boolean _isMyTurn; //Next move is my turn or not
+	int _lastChanged; // Before getting this position, the position last sowed
 	
 	public int[] getPiles(){
 		return _piles;
@@ -32,5 +33,12 @@ public class Position {
 	}
 	public void setIsMyTurn(boolean isMyTurn){
 		_isMyTurn = isMyTurn;
+	}
+	
+	public void setLastChanged(int lastChanged){
+		_lastChanged = lastChanged;
+	}
+	public int getLastChanged(){
+		return _lastChanged;
 	}
 }	

@@ -157,6 +157,7 @@ public class Game {
 	private Position sowForCal(Position pos_current,int pos_choose){
 		Position pos_next = new Position();
 		pos_next.setPiles(pos_current.getPiles()); // copy pos_current to pos_next
+		int lastChanged = 0;
 		
 		if(pos_current.getIsMyTurn() && pos_choose<12 && pos_choose>=0){ // is my turn
 			pos_next.setPiles(pos_choose,0);
@@ -169,6 +170,7 @@ public class Game {
 			System.out.println("Wrong chosen position");
 		}
 		
+		pos_next.setLastChanged(lastChanged);
 		pos_next.setIsMyTurn(!pos_current.getIsMyTurn());
 		return pos_next;
 	}
@@ -227,10 +229,29 @@ public class Game {
 	
 	private int evaluation(Position pos_current, int pos_choose){
 		//difference of the taken seeds from capture
+		int seedsCaptured = 0;
 		Position pos_next = new Position();
 		pos_next = sowForCal(pos_current,pos_choose); // just sow 
-		int num = -1;
-		return 1;
+		int lastChanged = pos_next.getLastChanged();
+		
+		if(pos_current.getIsMyTurn() && lastChanged >= pos_next.getPiles().length/2){ // Capture the opponent's seeds
+			while(pos_next.getPiles()[lastChanged] >= 2 && pos_next.getPiles()[lastChanged] <= 3){
+				//continue as long as we are on the opponents side and the number of seeds is 2 or 3
+				seedsCaptured += pos_next.getPiles()[lastChanged]; 	//didn't consider capture all the seeds
+				lastChanged--;
+			}
+		}else if (!pos_current.getIsMyTurn() && lastChanged>=0 && lastChanged<pos_next.getPiles().length/2){ // Capture my seeds
+			//the turn of the user input
+			while(pos_next.getPiles()[lastChanged] >= 2 && pos_next.getPiles()[lastChanged] <= 3 && lastChanged >= 0){
+				//continue as long as we are on the opponents side and the number of seeds is 2 or 3
+				seedsCaptured += pos_next.getPiles()[lastChanged];
+				lastChanged--;				
+			}			
+		}else {
+			seedsCaptured = 0;
+		}
+
+		return seedsCaptured;
 	}
 	
 	private int finalPosition(Position pos_current){
