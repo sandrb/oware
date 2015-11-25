@@ -104,6 +104,7 @@ public class Game {
 		}
 		//for testing: sow a random integer from the options
 		int position = options.get(randomGenerator.nextInt(options.size()));
+		
 		int lastChanged = sow(position);
 		capture(lastChanged);//capture seeds if needed
 		System.out.println("Computer sowed position " + position);
@@ -414,7 +415,11 @@ public class Game {
 	    }
 	    
 	    if (depth == depthMax) {
-	    	return evaluation(pos_current, 1);
+	    	int result = -100;
+	    	for(int i = 0; i < currentPiles.length; i++){
+	    		result = Math.max(evaluation(pos_current, i),result);
+	    	}
+	    	return result;
 	               // the simplest evealution fucntion is the difference of the taken seeds
 	    }
 	    for(int i=0;i<12;i++){
