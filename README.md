@@ -8,7 +8,7 @@ Project description:
 ----|----|----|----|----|----|----|----|----|----|----|----
  23 | 22 | 21 | 20 | 19 | 18 | 17 | 16 | 15 | 14 | 13 | 12 
 
-pits 0 - 11 are mine and pits 12 - 23 are the opponents
+pits 0 - 11 are the user input and pits 12 - 23 are the computer program
 Each pit has 4 seeds at the beginning.
 Note: Move clockwise!!
 
