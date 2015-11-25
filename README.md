@@ -1,5 +1,5 @@
 # oware
-Oware computational program by Sander Breukink en Siqi Li
+Oware computational program by Sander Breukink and Siqi Li
 https://en.wikipedia.org/wiki/Oware
 
 Project description: 
