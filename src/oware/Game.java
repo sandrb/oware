@@ -158,6 +158,25 @@ public class Game {
 		return lastChanged;
 	}
 	
+	private Position sowForCal(Position pos_current,int pos_choose){
+		Position pos_next = new Position();
+		pos_next.setPiles(pos_current.getPiles()); // copy pos_current to pos_next
+		
+		if(pos_current.getIsMyTurn() && pos_choose<12 && pos_choose>=0){ // is my turn
+			pos_next.setPiles(pos_choose,0);
+			
+			
+		}
+		else if(!pos_current.getIsMyTurn() && pos_choose<24 && pos_choose>=12){ // is not my turn
+			// need to complete
+		}else{
+			System.out.println("Wrong chosen position");
+		}
+		
+		pos_next.setIsMyTurn(!pos_current.getIsMyTurn());
+		return pos_next;
+	}
+	
 	/**
 	 * Captures the seeds after a turn
 	 * @param lastChanged: pile lastly increased
@@ -183,6 +202,7 @@ public class Game {
 		}
 	}
 	
+<<<<<<< HEAD
 	private boolean hasWonLost(){
 		//create a new position
 		Position currentPosition = new Position();
@@ -216,6 +236,14 @@ public class Game {
 		if(input == "y"){
 			newGame();
 		}
+=======
+	private int evaluation(Position pos_current, int pos_choose){
+		//difference of the taken seeds from capture
+		Position pos_next = new Position();
+		pos_next = sowForCal(pos_current,pos_choose); // just sow 
+		int num = 
+		return 1;
+>>>>>>> c90306934b6f1903b0feee7027e225f473968969
 	}
 	
 	private int finalPosition(Position pos_current){
@@ -292,11 +320,7 @@ public class Game {
 		return -1;// Not finalPosition
 	}
 	
-	private int evaluation(Position pos_current, boolean isMyTurn, int depth, int pos_choose){
-		//difference of the taken seeds from capture
-		
-		return 1;
-	}
+
 	private boolean validMove(Position pos_current,int pos_choose){
 		if(finalPosition(pos_current) == -1){ // if not final position  // has some overlap in finalPosition considering only i
 			
@@ -332,7 +356,7 @@ public class Game {
 		}else return false;
 	}
 	
-	private Position playMove(Position pos_current,boolean isMyTurn,int pos_choose){
+	private Position playMove(Position pos_current,int pos_choose){
 		Position pos_next = new Position();
 		if(finalPosition(pos_current) == -1){ //if not final position // doesn't do more valid check
 			int num = pos_current.getPiles()[pos_choose];
@@ -392,7 +416,7 @@ public class Game {
 	    	if (validMove(pos_current,i)){
 	                       // WRITE function playMove(&pos_next,pos_current, computer_play,i)
 	                       // we play the move i from pos_current and obtain the new position pos_next
-	    		pos_next = playMove(pos_current, isMyTurn,i);
+	    		pos_next = playMove(pos_current,i);
 	 			// pos_next is the new current position and we change the player
 	            tab_values[i]=minMaxValue(pos_next,!isMyTurn,depth+1);
 	    	} else {
