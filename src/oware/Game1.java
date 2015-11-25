@@ -1,140 +1,63 @@
 package oware;
 
-import java.util.ArrayList;
-import java.util.Random;
 import java.util.Scanner;
 
-public class Game {
+public class Game1 {
 	int maxSeeds = 96; //initial and maximum number of seeds
-	int[] currentPiles = new int[24]; //values represents the current piles, piles 0 - 11 are the users and piles 12 - 23 are the programs
+	int[] currentPiles = new int[24]; //values represents the current piles, piles 0 - 11 are ours and piles 12 - 23 are the opponents
 	int[] nextPiles = new int[currentPiles.length]; //value represents the piles of next move.
-	int programScore; // The score of the program
-	int inputScore; // The score of the input
-	boolean isProgramTurn; //Next move is my turn or not
+	int myScore; // The score of the mine
+	int yourScore; // The score of the opponent
+	boolean isMyTurn; //Next move is my turn or not
 	int depthMax = 4; //the maximal depth
-	Random randomGenerator = new Random();//Random Generator, used for testing
 	Scanner user_input = new Scanner( System.in );
 	
-	/**
-	 * Initializes a new game with an equal number of seeds per pile.
-	 */
+	public static void main(String[] args) {
+		Game game = new Game();
+		game.newGame();
+	}
 	public void newGame(){
-		int seedsPerPile = maxSeeds / currentPiles.length;//calculate max number of seeds per pile
-		for(int i =0; i < currentPiles.length; i++){
-			currentPiles[i] = seedsPerPile;//assign number to each pile
+		for(int i = 0; i < currentPiles.length; i++){
+			currentPiles[i] = maxSeeds/currentPiles.length;
 		}
-		System.out.println("Who starts? 0: computer, 1: player.");
+		System.out.println("Who starts? 0: We, 1: Opponent.");
 		String input = user_input.nextLine();
 		int start = Integer.parseInt(input);
 		System.arraycopy(currentPiles, 0, nextPiles, 0, currentPiles.length);
 		outputPiles();
 		
-		programScore = 0;
-		inputScore = 0;	
-		
-		if(start == 1){
-			inputMove();
-		} else {
-			computerMove();
+		if(start ==1){ //Opponent start first
+			
+			
+		}else{//We start first
+			
 		}
 	}
-		
-	/**
-	 * Let's the player do a move
-	 */
-	public void inputMove(){
-		isProgramTurn = false;
-		String options = "";
-		for(int i = 0; i < nextPiles.length / 2; i++){//for each position
-			if(nextPiles[i] > 0){//check if it is "movable"
-				options += " " + i;//if yes, add it to the options				
-			}
-		}
-		System.out.println("Select position to sow, options are:" + options);
+	public void opponentMove(){
+		isMyTurn = false;
 		String input = user_input.nextLine();
 		int position = Integer.parseInt(input);
-		int lastChanged = sow(position);
-		capture(lastChanged);//capture seeds if needed
+		while(position<12 || position>=24){
+			System.out.println("position should between 12 and 23");
+			input = user_input.nextLine();
+			position = Integer.parseInt(input);
+		}
 		
-		System.out.println();
-		outputPiles();
-
-		if(!hasWonLost()){//no winner yet, continue
-			System.arraycopy(nextPiles, 0, currentPiles, 0, currentPiles.length);//nextpiles become currentpiles
-			computerMove();			
-		}		
-	}
-	
-	/**
-	 * Does a computer move
-	 */
-	public void computerMove(){
-		isProgramTurn = true;
-		ArrayList<Integer> options = new ArrayList<Integer>();
-		for(int i = 0; i < nextPiles.length / 2; i++){//for each position
-			if(nextPiles[i + nextPiles.length / 2] > 0){//check if it is "movable"
-				options.add(i + nextPiles.length / 2);
-			}
-		}
-		//for testing: sow a random integer from the options
-		int position = computeNextMove();
 		
-		int lastChanged = sow(position);
-		capture(lastChanged);//capture seeds if needed
-		System.out.println("Computer sowed position " + position);
-		outputPiles();
-		if(!hasWonLost()){//no winner yet, continue
-			System.arraycopy(nextPiles, 0, currentPiles, 0, currentPiles.length);//nextpiles become currentpiles
-			inputMove();			
-		}		
 	}
-	
-	/**
-	 * Compute the next move according to current position
-	 */
-	public int computeNextMove(){
-		Position pos_current = new Position();
-		pos_current.setPiles(currentPiles);
-		pos_current.setIsMyTurn(isProgramTurn);
-		pos_current.setMyScore(programScore);
-		pos_current.setYourScore(inputScore);
-		int[] valuePosition = new int[2];
-		valuePosition = minMaxValue(pos_current,0);
-		return valuePosition[1];
+	public void myMove(){
+		
 	}
-	
-	
-	/**
-	 * returns the current piles in the same format as they are inputed
-	 */
-	public void outputPiles(){
-		System.out.print("Player 1 (u input): ");
-		for(int i = 0; i < 12; i++){
-			System.out.print(nextPiles[i] + " ");
-		}
-		System.out.println();
-		System.out.print("Player 2 (program): ");
-		for(int i = 23; i >= 12; i--){
-			System.out.print(nextPiles[i] + " ");
-		}
-		System.out.println();
-		System.out.println("Program: " + programScore + ", input: " + inputScore);
-		System.out.println();
-	}
-	
-	
 	/**
 	 * Sows a certain position, spreading it's seeds over the neighbors
 	 * @param pos_choose: position that is sowed.
 	 * @return: returns the latest pile whose seed count was increased.
 	 */
 	private int sow(int pos_choose){
-		if(pos_choose >= currentPiles.length || pos_choose < 0){
-		   throw new IllegalArgumentException("Invalid input for sow, was " + pos_choose + ", should be 0 <= input < " + (currentPiles.length/2));			
-		}
+
 		int lastChanged = 0;
 		int i = 0;
-		while(nextPiles[pos_choose] > 0){
+		while(nextPiles[pos_choose] > 0){ 
 			if((pos_choose+i+1) % currentPiles.length != pos_choose){//skip pos_choose
 				nextPiles[(pos_choose+i+1) % currentPiles.length]++;//place one seed
 				lastChanged = (pos_choose+i+1) % currentPiles.length;
@@ -144,7 +67,73 @@ public class Game {
 		}
 		return lastChanged;
 	}
-	
+	/**
+	 * Captures the seeds after a turn
+	 * @param lastChanged: pile lastly increased
+	 */
+	private void capture(int lastChanged){
+		//no calculation, actually capturing seeds now.		
+		boolean doCapture = true;//set to false if it is not needed.
+		int sumRemaining = 0;//sum of all the seeds remaining on the opponents side
+		if(isMyTurn){ // Capture the opponent's seeds
+			for(int i = 0; i < nextPiles.length/2 && sumRemaining == 0; i++){
+				//get sum of all positions NOT seeded (only need to know if it's more than 0)
+				if(i > lastChanged){
+					sumRemaining += nextPiles[i];
+				}else if(nextPiles[i] != 2 && nextPiles[i] != 3){
+					sumRemaining += nextPiles[i];
+				}
+			}
+			if(sumRemaining == 0){
+				// if a move would capture all of an opponent's seeds, the capture is forfeited since this would prevent the opponent from continuing the game, and the seeds are instead left on the board
+				doCapture = false;
+			}
+			
+			if(doCapture){
+				while(lastChanged >= 0 && lastChanged < nextPiles.length/2 && nextPiles[lastChanged] >= 2 && nextPiles[lastChanged] <= 3){
+					//continue as long as we are on users side and the number of seeds is 2 or 3
+					myScore += nextPiles[lastChanged];
+					nextPiles[lastChanged] = 0;	
+					lastChanged--;
+				}				
+			}
+		}else{ // Capture my seeds
+			for(int i = nextPiles.length/2; i < nextPiles.length && sumRemaining == 0; i++){
+				//get sum of all positions NOT seeded (only need to know if it's more than 0)
+				if(i > lastChanged){
+					sumRemaining += nextPiles[i];
+				}else if(nextPiles[i] != 2 && nextPiles[i] != 3){
+					sumRemaining += nextPiles[i];
+				}
+			}
+			if(sumRemaining == 0){
+				// if a move would capture all of an opponent's seeds, the capture is forfeited since this would prevent the opponent from continuing the game, and the seeds are instead left on the board
+				doCapture = false;
+			}
+			if(doCapture){
+				while(lastChanged >= nextPiles.length/2 && nextPiles[lastChanged] >= 2 && nextPiles[lastChanged] <= 3){
+					//continue as long as we are on the programs side and the number of seeds is 2 or 3
+					yourScore += nextPiles[lastChanged];
+					nextPiles[lastChanged] = 0;
+					lastChanged--;				
+				}					
+			}		
+		}
+	}
+	public void outputPiles(){
+		System.out.print("Me: ");
+		for(int i = 0; i < 12; i++){
+			System.out.print(nextPiles[i] + " ");
+		}
+		System.out.println();
+		System.out.print("Opponent: ");
+		for(int i = 23; i >= 12; i--){
+			System.out.print(nextPiles[i] + " ");
+		}
+		System.out.println();
+		System.out.println("My Score: " + myScore + ", Opponent's Score: " + yourScore);
+		System.out.println();
+	}
 	/**
 	 * Calculates the sow for that position
 	 * @param pos_current: the current position the game is in
@@ -174,120 +163,6 @@ public class Game {
 		pos_next.setLastChanged(lastChanged);
 		pos_next.setIsMyTurn(!pos_current.getIsMyTurn());
 		return pos_next;
-	}
-	
-	/**
-	 * Captures the seeds after a turn
-	 * @param lastChanged: pile lastly increased
-	 */
-	private void capture(int lastChanged){
-		//no calculation, actually capturing seeds now.		
-		boolean doCapture = true;//set to false if it is not needed.
-		int sumRemaining = 0;//sum of all the seeds remaining on the opponents side
-		if(isProgramTurn){
-			//the turn of the code
-			for(int i = 0; i < nextPiles.length/2 && sumRemaining == 0; i++){
-				//get sum of all positions NOT seeded (only need to know if it's more than 0)
-				if(i > lastChanged){
-					sumRemaining += nextPiles[i];
-				}else if(nextPiles[i] != 2 && nextPiles[i] != 3){
-					sumRemaining += nextPiles[i];
-				}
-			}
-			if(sumRemaining == 0){
-				// if a move would capture all of an opponent's seeds, the capture is forfeited since this would prevent the opponent from continuing the game, and the seeds are instead left on the board
-				doCapture = false;
-			}
-			
-			if(doCapture){
-				while(lastChanged >= 0 && lastChanged < nextPiles.length/2 && nextPiles[lastChanged] >= 2 && nextPiles[lastChanged] <= 3){
-					//continue as long as we are on users side and the number of seeds is 2 or 3
-					programScore += nextPiles[lastChanged];
-					nextPiles[lastChanged] = 0;	
-					lastChanged--;
-				}				
-			}
-		}else{
-			//the turn of the user input
-			for(int i = nextPiles.length/2; i < nextPiles.length && sumRemaining == 0; i++){
-				//get sum of all positions NOT seeded (only need to know if it's more than 0)
-				if(i > lastChanged){
-					sumRemaining += nextPiles[i];
-				}else if(nextPiles[i] != 2 && nextPiles[i] != 3){
-					sumRemaining += nextPiles[i];
-				}
-			}
-			if(sumRemaining == 0){
-				// if a move would capture all of an opponent's seeds, the capture is forfeited since this would prevent the opponent from continuing the game, and the seeds are instead left on the board
-				doCapture = false;
-			}
-			if(doCapture){
-				while(lastChanged >= nextPiles.length/2 && nextPiles[lastChanged] >= 2 && nextPiles[lastChanged] <= 3){
-					//continue as long as we are on the programs side and the number of seeds is 2 or 3
-					inputScore += nextPiles[lastChanged];
-					nextPiles[lastChanged] = 0;
-					lastChanged--;				
-				}					
-			}		
-		}
-	}
-	
-	/**
-	 * Checks if the game has been won or lost
-	 * @return true if the game is finished, false otherwise
-	 */
-	private boolean hasWonLost(){
-		//create a new position
-		Position currentPosition = new Position();
-		currentPosition.setPiles(nextPiles);
-		currentPosition.setIsMyTurn(isProgramTurn);
-		currentPosition.setMyScore(programScore);
-		currentPosition.setYourScore(inputScore);
-		
-		//get the result for this position
-		int result = finalPosition(currentPosition);
-		if(result != -1){
-			//game has finished, output result
-			if(result == 96){
-				System.out.println("The program has won, user input has lost.");
-			}else if(result == -96){
-				System.out.println("The user input has won, program has lost.");				
-			}else{
-				//result == 0
-				System.out.println("The game resulted in a draw.");
-			}
-			return true;
-		}else{
-			//game has not yet finished
-			return false;
-		}
-	}
-	
-	private int evaluation(Position pos_current, int pos_choose){
-		//difference of the taken seeds from capture
-		int seedsCaptured = 0;
-		Position pos_next = new Position();
-		pos_next = sowForCal(pos_current,pos_choose); // just sow 
-		int lastChanged = pos_next.getLastChanged();
-		
-		if(pos_current.getIsMyTurn() && lastChanged >= pos_next.getPiles().length/2){ // Capture the opponent's seeds
-			while(pos_next.getPiles()[lastChanged] >= 2 && pos_next.getPiles()[lastChanged] <= 3){
-				//continue as long as we are on the opponents side and the number of seeds is 2 or 3
-				seedsCaptured += pos_next.getPiles()[lastChanged]; 	//didn't consider capture all the seeds
-				lastChanged--;
-			}
-		}else if (!pos_current.getIsMyTurn() && lastChanged>=0 && lastChanged<pos_next.getPiles().length/2){ // Capture my seeds
-			//the turn of the user input
-			while(pos_next.getPiles()[lastChanged] >= 2 && pos_next.getPiles()[lastChanged] <= 3 && lastChanged >= 0){
-				//continue as long as we are on the opponents side and the number of seeds is 2 or 3
-				seedsCaptured += pos_next.getPiles()[lastChanged];
-				lastChanged--;				
-			}			
-		}else {
-			seedsCaptured = 0;
-		}
-
-		return seedsCaptured;
 	}
 	
 	private int finalPosition(Position pos_current){
@@ -364,7 +239,33 @@ public class Game {
 		return -1;// Not finalPosition
 	}
 	
+	private int evaluation(Position pos_current, int pos_choose){
+		//difference of the taken seeds from capture
+		int seedsCaptured = 0;
+		Position pos_next = new Position();
+		pos_next = sowForCal(pos_current,pos_choose); // just sow 
+		int lastChanged = pos_next.getLastChanged();
+		
+		if(pos_current.getIsMyTurn() ){ // Capture the opponent's seeds
+			while(pos_next.getPiles()[lastChanged] >= 2 && pos_next.getPiles()[lastChanged] <= 3 && lastChanged >= pos_next.getPiles().length/2){
+				//continue as long as we are on the opponents side and the number of seeds is 2 or 3
+				seedsCaptured += pos_next.getPiles()[lastChanged]; 	//didn't consider capture all the seeds
+				lastChanged--;
+			}
+		}else if (!pos_current.getIsMyTurn()){ // Capture my seeds
+			//the turn of the user input
+			while(pos_next.getPiles()[lastChanged] >= 2 && pos_next.getPiles()[lastChanged] <= 3 && lastChanged >= 0 && lastChanged<pos_next.getPiles().length/2){
+				//continue as long as we are on the opponents side and the number of seeds is 2 or 3
+				seedsCaptured += pos_next.getPiles()[lastChanged];
+				lastChanged--;				
+			}			
+		}else {
+			seedsCaptured = 0;
+		}
 
+		return seedsCaptured;
+	}
+	
 	private boolean validMove(Position pos_current,int pos_choose){
 		if(finalPosition(pos_current) == -1){ // if not final position  // has some overlap in finalPosition considering only i
 			
@@ -433,7 +334,6 @@ public class Game {
 		}else return null;
 		return pos_next;
 	}
-	
 	private int[] minMaxValue(Position pos_current, int depth){ 
 		int[] valuePosition = new int[2];
 		int[] tab_values = new int[12];
@@ -520,10 +420,5 @@ public class Game {
 		}
 		return valuePosition;
 	}
-
-	public static void main(String[] args) {
-		Game game = new Game();
-		game.newGame();
-	}
-
+	
 }
