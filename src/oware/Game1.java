@@ -13,7 +13,7 @@ public class Game1 {
 	Scanner user_input = new Scanner( System.in );
 	
 	public static void main(String[] args) {
-		Game game = new Game();
+		Game1 game = new Game1();
 		game.newGame();
 	}
 	public void newGame(){
