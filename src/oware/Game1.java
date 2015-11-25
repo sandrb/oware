@@ -1,5 +1,6 @@
 package oware;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Game1 {
@@ -37,7 +38,8 @@ public class Game1 {
 	}
 	public void opponentMove(){
 		isMyTurn = false;
-		System.out.println("Please input the opponent's position");
+		ArrayList<Integer> Options = options();
+		System.out.println("Please input the opponent's position (options:" + optionsToString(Options) + ")");
 		String input = user_input.nextLine();
 		int position = Integer.parseInt(input);
 		while(position<12 || position>=24 || currentPiles[position] == 0){
@@ -57,6 +59,32 @@ public class Game1 {
 			myMove();			
 		}	
 		
+	}
+	public ArrayList<Integer> options(){
+		ArrayList<Integer> options = new ArrayList<Integer>();
+		if(isMyTurn){
+			//checks for the fist half
+			for(int i = 0; i < nextPiles.length / 2; i++){//for each position
+				if(nextPiles[i] > 0){//check if it is "movable"
+					options.add(i);
+				}
+			}			
+		}else{
+			//checks for the second half
+			for(int i = 0; i < nextPiles.length / 2; i++){//for each position
+				if(nextPiles[i + nextPiles.length / 2] > 0){//check if it is "movable"
+					options.add(i + nextPiles.length / 2);
+				}
+			}	
+		}
+		return options;
+	}
+	public String optionsToString(ArrayList<Integer> options){
+		String returnVal = "";
+		for (Integer i : options){
+		    returnVal += " " + i;
+		}
+		return returnVal;
 	}
 	public void myMove(){
 		isMyTurn = true;
