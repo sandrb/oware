@@ -9,9 +9,9 @@ public class Game {
 	int maxSeeds = 96; //initial and maximum number of seeds
 	int[] currentPiles = new int[24]; //values represents the current piles, piles 0 - 11 are ours and piles 12 - 23 are the opponents
 	int[] nextPiles = new int[currentPiles.length]; //value represents the piles of next move.
-	int myScore = 0; // My score, initiated with 0
-	int yourScore = 0; // The score of the opponent, initiated with 0 
-//	boolean isMyTurn; //Next move is my turn or not
+	int programScore; // The score of the program
+	int inputScore; // The score of the input
+	boolean isProgramTurn; //Next move is my turn or not
 	int depthMax = 4; //the maximal depth
 	Random randomGenerator = new Random();//Random Generator, used for testing
 	Scanner user_input = new Scanner( System.in );
@@ -29,7 +29,6 @@ public class Game {
 		for(int i = 0; i < 12; i++){
 			currentPiles[i] = Integer.parseInt(inputArray[i]);
 		}	
-		
 
 		System.out.println("Player 2 piles? 12 numbers seperated by spaces.");
 		input = user_input.nextLine();
@@ -55,6 +54,10 @@ public class Game {
 		int start = Integer.parseInt(input);
 		System.arraycopy(currentPiles, 0, nextPiles, 0, currentPiles.length);
 		outputPiles();
+		
+		programScore = 0;
+		inputScore = 0;	
+		
 		if(start == 1){
 			inputMove();
 		} else {
@@ -66,6 +69,7 @@ public class Game {
 	 * Let's the player do a move
 	 */
 	public void inputMove(){
+		isProgramTurn = false;
 		String options = "";
 		for(int i = 0; i < nextPiles.length / 2; i++){//for each position
 			if(nextPiles[i] > 0){//check if it is "movable"
@@ -75,8 +79,9 @@ public class Game {
 		System.out.println("Select position to sow, options are:" + options);
 		String input = user_input.nextLine();
 		int position = Integer.parseInt(input);
-		sow(position);
+		int lastChanged = sow(position);
 		//todo: capture seeds
+		capture(false,lastChanged);//capture seeds if needed
 		System.out.println();
 		outputPiles();
 		//todo: check for win/loss
@@ -88,6 +93,7 @@ public class Game {
 	 * Just a random move for now, just for I/O testing
 	 */
 	public void computerMove(){
+		isProgramTurn = true;
 		ArrayList<Integer> options = new ArrayList<Integer>();
 		for(int i = 0; i < nextPiles.length / 2; i++){//for each position
 			if(nextPiles[i + nextPiles.length / 2] > 0){//check if it is "movable"
@@ -125,19 +131,39 @@ public class Game {
 	/**
 	 * Sows a certain position, spreading it's seeds over the neighbors
 	 * @param pos_choose: position that is sowed.
+	 * @return: returns the latest pile whose seed count was increased.
 	 */
-	private void sow(int pos_choose){
+	private int sow(int pos_choose){
 		if(pos_choose >= currentPiles.length || pos_choose < 0){
 		   throw new IllegalArgumentException("Invalid input for sow, was " + pos_choose + ", should be 0 <= input < " + (currentPiles.length/2));			
 		}
-		
+		int lastChanged = 0;
 		int i = 0;
 		while(nextPiles[pos_choose] > 0){
 			if((pos_choose+i+1) % currentPiles.length != pos_choose){//skip pos_choose
 				nextPiles[(pos_choose+i+1) % currentPiles.length]++;//place one seed
+				lastChanged = (pos_choose+i+1) % currentPiles.length;
 				nextPiles[pos_choose]--;//remove one seed				
 			}
 			i++;//go on to the next position
+		}
+		return lastChanged;
+	}
+	
+	/**
+	 * Captures the seeds after a turn
+	 * @param calculate: if set to true, we just calculate the return value and not actually capture
+	 */
+	private void capture(boolean calculate, int lastChanged){
+		if(!calculate){
+			//no calculation, actually capturing seeds now.
+			if(isProgramTurn){
+				
+			}else{
+				
+			}
+		} else {
+			//hypothetical case, just return amount of seeds captured
 		}
 	}
 	
