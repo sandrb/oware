@@ -152,6 +152,23 @@ public class Game {
 		return lastChanged;
 	}
 	
+	private Position sowForCal(Position pos_current,int pos_choose){
+		Position pos_next = new Position();
+		pos_next.setPiles(pos_current.getPiles()); // copy pos_current to pos_next
+		
+		int lastChanged = 0;
+		int i = 0;
+		while(nextPiles[pos_choose] > 0){
+			if((pos_choose+i+1) % currentPiles.length != pos_choose){//skip pos_choose
+				nextPiles[(pos_choose+i+1) % currentPiles.length]++;//place one seed
+				lastChanged = (pos_choose+i+1) % currentPiles.length;
+				nextPiles[pos_choose]--;//remove one seed				
+			}
+			i++;//go on to the next position
+		}
+		return lastChanged;
+	}
+	
 	/**
 	 * Captures the seeds after a turn
 	 * @param lastChanged: pile lastly increased
@@ -175,6 +192,14 @@ public class Game {
 				lastChanged--;				
 			}			
 		}
+	}
+	
+	private int evaluation(Position pos_current, int pos_choose){
+		//difference of the taken seeds from capture
+		Position pos_next = new Position();
+		pos_next = sowForCal(pos_current,pos_choose); // just sow 
+		int num = 
+		return 1;
 	}
 	
 	private int finalPosition(Position pos_current){
@@ -251,11 +276,7 @@ public class Game {
 		return -1;// Not finalPosition
 	}
 	
-	private int evaluation(Position pos_current, boolean isMyTurn, int depth, int pos_choose){
-		//difference of the taken seeds from capture
-		
-		return 1;
-	}
+
 	private boolean validMove(Position pos_current,int pos_choose){
 		if(finalPosition(pos_current) == -1){ // if not final position  // has some overlap in finalPosition considering only i
 			
@@ -291,7 +312,7 @@ public class Game {
 		}else return false;
 	}
 	
-	private Position playMove(Position pos_current,boolean isMyTurn,int pos_choose){
+	private Position playMove(Position pos_current,int pos_choose){
 		Position pos_next = new Position();
 		if(finalPosition(pos_current) == -1){ //if not final position // doesn't do more valid check
 			int num = pos_current.getPiles()[pos_choose];
@@ -351,7 +372,7 @@ public class Game {
 	    	if (validMove(pos_current,i)){
 	                       // WRITE function playMove(&pos_next,pos_current, computer_play,i)
 	                       // we play the move i from pos_current and obtain the new position pos_next
-	    		pos_next = playMove(pos_current, isMyTurn,i);
+	    		pos_next = playMove(pos_current,i);
 	 			// pos_next is the new current position and we change the player
 	            tab_values[i]=minMaxValue(pos_next,!isMyTurn,depth+1);
 	    	} else {
