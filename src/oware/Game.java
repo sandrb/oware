@@ -185,6 +185,7 @@ public class Game {
 		//no calculation, actually capturing seeds now.		
 		if(isProgramTurn){
 			//the turn of the code
+			//GAVE ArrayIndexOutOfBoundsException: -1
 			while(nextPiles[lastChanged] >= 2 && nextPiles[lastChanged] <= 3 && lastChanged >= 0 && lastChanged < nextPiles.length/2){
 				//continue as long as we are on users side and the number of seeds is 2 or 3
 				programScore += nextPiles[lastChanged];
