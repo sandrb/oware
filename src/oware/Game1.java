@@ -415,28 +415,47 @@ public class Game1 {
 		if(finalPosition(pos_current) == -1){ //if not final position // doesn't do more valid check
 			pos_next = sowForCal(pos_current,pos_choose);
 			
+			int[] tmpPiles = new int[currentPiles.length];
+			int sumRemaining = 0;
+			
 			// Do capture and obtain the new pos_next!
 			int seedsCaptured = 0;
 			int lastChanged = pos_next.getLastChanged();
-			if(pos_current.getIsMyTurn() && lastChanged >= pos_next.getPiles().length/2){ // Capture the opponent's seeds
-				while(pos_next.getPiles()[lastChanged] >= 2 && pos_next.getPiles()[lastChanged] <= 3){
+			if(pos_current.getIsMyTurn()){ // Capture the opponent's seeds
+				while(pos_next.getPiles()[lastChanged] >= 2 && pos_next.getPiles()[lastChanged] <= 3 && lastChanged >= pos_next.getPiles().length/2){
 					//continue as long as we are on the opponents side and the number of seeds is 2 or 3
 					seedsCaptured += pos_next.getPiles()[lastChanged]; 	//didn't consider capture all the seeds
-					pos_next.setPiles(lastChanged, 0);
+					tmpPiles[lastChanged] = 0;
 					lastChanged--;
 				}
-				pos_next.setMyScore(seedsCaptured + pos_current.getMyScore());
-			}else if (!pos_current.getIsMyTurn() && lastChanged>=0 && lastChanged<pos_next.getPiles().length/2){ // Capture my seeds
+				for(int i = tmpPiles.length/2; i < tmpPiles.length; i++){
+					sumRemaining += tmpPiles[i];
+				}
+				if(sumRemaining ==0){//if sumRemaining == 0, shouldn't capture
+					pos_next.setMyScore(pos_current.getMyScore());			
+				}else{ //can capture 
+					pos_next.setPiles(tmpPiles);
+					pos_next.setMyScore(seedsCaptured + pos_current.getMyScore());
+				}
+				pos_next.setYourScore(pos_current.getYourScore());
+			}else{ // Capture my seeds
 				//the turn of the user input
-				while(pos_next.getPiles()[lastChanged] >= 2 && pos_next.getPiles()[lastChanged] <= 3 && lastChanged >= 0){
+				while(pos_next.getPiles()[lastChanged] >= 2 && pos_next.getPiles()[lastChanged] <= 3 && lastChanged >= 0 && lastChanged<pos_next.getPiles().length/2){
 					//continue as long as we are on the opponents side and the number of seeds is 2 or 3
 					seedsCaptured += pos_next.getPiles()[lastChanged];
-					pos_next.setPiles(lastChanged, 0);
+					tmpPiles[lastChanged] = 0;
 					lastChanged--;				
 				}	
-				pos_next.setYourScore(seedsCaptured + pos_current.getYourScore());
-			}else {
-				seedsCaptured = 0;
+				for(int i = 0; i < tmpPiles.length/2; i++){
+					sumRemaining += tmpPiles[i];
+				}
+				if(sumRemaining ==0){//if sumRemaining == 0, shouldn't capture
+					pos_next.setYourScore(pos_current.getYourScore());
+				}else{ //can capture 
+					pos_next.setPiles(tmpPiles);
+					pos_next.setYourScore(seedsCaptured + pos_current.getYourScore());
+				}
+				pos_next.setMyScore(pos_current.getMyScore());	
 			}
 			
 			pos_next.setIsMyTurn(!pos_current.getIsMyTurn());
@@ -522,7 +541,7 @@ public class Game1 {
 			}        
 		}
 		valuePosition[0] = res;
-		for(int i=0;i<12;i++){
+		for(int i=11;i>=0;i--){
 			if(res==tab_values[i]){
 				valuePosition[1] = i;
 			}

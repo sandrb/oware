@@ -14,7 +14,7 @@ public class Position {
 		_piles[position] = value;
 	}
 	public void setPiles(int[] piles){
-		_piles = piles;
+		System.arraycopy(piles, 0, _piles, 0, piles.length);
 	}
 	public int getMyScore(){
 		return _myScore;
