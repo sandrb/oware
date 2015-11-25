@@ -89,6 +89,21 @@ public class Game {
 	}
 	
 	/**
+	 * Compute the next move according to current position
+	 */
+	public int computeNextMove(){
+		Position pos_current = new Position();
+		pos_current.setPiles(currentPiles);
+		pos_current.setIsMyTurn(isProgramTurn);
+		pos_current.setMyScore(programScore);
+		pos_current.setYourScore(inputScore);
+		int[] valuePosition = new int[2];
+		valuePosition = minMaxValue(pos_current,0);
+		return valuePosition[1];
+	}
+	
+	
+	/**
 	 * returns the current piles in the same format as they are inputed
 	 */
 	public void outputPiles(){
@@ -137,7 +152,7 @@ public class Game {
 	 */
 	private Position sowForCal(Position pos_current,int pos_choose){
 		if(pos_choose >= currentPiles.length || pos_choose < 0){
-		   throw new IllegalArgumentException("Invalid input for sow, was " + pos_choose + ", should be 0 <= input < " + (currentPiles.length/2));			
+		   throw new IllegalArgumentException("Invalid input for sow, was " + pos_choose + ", should be 0 <= input < " + (currentPiles.length));			
 		}		
 		
 		Position pos_next = new Position();
@@ -387,50 +402,52 @@ public class Game {
 	private Position playMove(Position pos_current,int pos_choose){
 		Position pos_next = new Position();
 		if(finalPosition(pos_current) == -1){ //if not final position // doesn't do more valid check
-			int num = pos_current.getPiles()[pos_choose];
-			pos_next.setPiles(pos_current.getPiles()); // copy pos_current to pos_next
-			if(pos_current.getIsMyTurn() && pos_choose<12 && pos_choose>=0){ // is my turn
-				pos_next.setPiles(pos_choose,0);
-				for(int i = 1; i <= num; i++){
-					if(pos_choose + i < 24){
-						pos_next.setPiles(pos_choose + i,pos_next.getPiles()[pos_choose + i]+1);	
-					}
-					if(pos_choose + i >=24 && i<24){
-						pos_next.setPiles(pos_choose+i-24,pos_next.getPiles()[pos_choose+i-24]+1);
-					}
-					if(i>=24 && i<36){ // skip pos_choose once and end at opponent's piles
-						pos_next.setPiles(pos_choose+i-24+ 1,pos_next.getPiles()[pos_choose+i-24+1 + 1]+1);
-					}			
-					if(i>=36){//skip pos_choose once
-						//.....complex here, working on it later
-					}
-				}
-				
-			}
-			else if(!pos_current.getIsMyTurn() && pos_choose<24 && pos_choose>=12){ // is not my turn
-				// need to complete
-			}else{
-				System.out.println("Wrong chosen position");
-			}
+			pos_next = sowForCal(pos_current,pos_choose);
 			
 			// Do capture and obtain the new pos_next!
+			int seedsCaptured = 0;
+			int lastChanged = pos_next.getLastChanged();
+			if(pos_current.getIsMyTurn() && lastChanged >= pos_next.getPiles().length/2){ // Capture the opponent's seeds
+				while(pos_next.getPiles()[lastChanged] >= 2 && pos_next.getPiles()[lastChanged] <= 3){
+					//continue as long as we are on the opponents side and the number of seeds is 2 or 3
+					seedsCaptured += pos_next.getPiles()[lastChanged]; 	//didn't consider capture all the seeds
+					pos_next.setPiles(lastChanged, 0);
+					lastChanged--;
+				}
+				pos_next.setMyScore(seedsCaptured + pos_current.getMyScore());
+			}else if (!pos_current.getIsMyTurn() && lastChanged>=0 && lastChanged<pos_next.getPiles().length/2){ // Capture my seeds
+				//the turn of the user input
+				while(pos_next.getPiles()[lastChanged] >= 2 && pos_next.getPiles()[lastChanged] <= 3 && lastChanged >= 0){
+					//continue as long as we are on the opponents side and the number of seeds is 2 or 3
+					seedsCaptured += pos_next.getPiles()[lastChanged];
+					pos_next.setPiles(lastChanged, 0);
+					lastChanged--;				
+				}	
+				pos_next.setYourScore(seedsCaptured + pos_current.getYourScore());
+			}else {
+				seedsCaptured = 0;
+			}
 			
 			pos_next.setIsMyTurn(!pos_current.getIsMyTurn());
 		}else return null;
 		return pos_next;
 	}
 	
-	private int minMaxValue(Position pos_current, int depth){ 
+	private int[] minMaxValue(Position pos_current, int depth){ 
+		int[] valuePosition = new int[2];
 		int[] tab_values = new int[12];
 		Position pos_next; 
 	    if (finalPosition(pos_current) == 96){
-	    	return 96;
+	    	valuePosition[0] = 96;
+//	    	return 96;
 	    }
 	    if (finalPosition(pos_current) == -96){
-	    	return -96;
+	    	valuePosition[0] = -96;
+//	    	return -96;
 	    }
 	    if (finalPosition(pos_current) == 0){
-	    	return 0;
+	    	valuePosition[0] = 0;
+//	    	return 0;
 	    }
 	    
 	    if (depth == depthMax) {
@@ -446,7 +463,8 @@ public class Game {
 			    		result = Math.min(evaluation(pos_current, i),result);
 			    	}
 	    		}
-	    		return result;
+	    		valuePosition[0] = result;
+//	    		return result;
 	    	}else{// current is not my turn    		
 	    		int result = evaluation(pos_current, pos_current.getPiles().length/2);
 	    		if(depthMax%2 == 0){ //bottom is also not my turn // choose the min 
@@ -458,7 +476,8 @@ public class Game {
 			    		result = Math.max(evaluation(pos_current, i),result);
 			    	}
 	    		}
-	    		return result;
+	    		valuePosition[0] = result;
+//	    		return result;
 	    	}
 	    }
 	    for(int i=0;i<12;i++){
@@ -470,12 +489,12 @@ public class Game {
 	                       // we play the move i from pos_current and obtain the new position pos_next
 	    		pos_next = playMove(pos_current,i);
 	 			// pos_next is the new current position and we change the player
-	            tab_values[i]=minMaxValue(pos_next,depth+1);
+	            tab_values[i]=minMaxValue(pos_next,depth+1)[0];
 	    	} else {
 				if (pos_current.getIsMyTurn()) tab_values[i]=-100;
 				else tab_values[i]=+100;
 	        }
-	      	}
+	    }
 	    int res = tab_values[0];
 		if (pos_current.getIsMyTurn()){
 			for(int i=0;i<12;i++){// WRITE the code: res contains the MAX of tab_values
@@ -486,8 +505,13 @@ public class Game {
 				res = Math.min(tab_values[i], res);
 			}        
 		}
-		return res;
-		
+		valuePosition[0] = res;
+		for(int i=0;i<12;i++){
+			if(res==i){
+				valuePosition[1] = i;
+			}
+		}
+		return valuePosition;
 	}
 
 	public static void main(String[] args) {
