@@ -185,16 +185,16 @@ public class Game {
 		//no calculation, actually capturing seeds now.		
 		if(isProgramTurn){
 			//the turn of the code
-			while(nextPiles[lastChanged] >= 2 && nextPiles[lastChanged] <= 3 && lastChanged >= nextPiles.length/2){
-				//continue as long as we are on the opponents side and the number of seeds is 2 or 3
+			while(nextPiles[lastChanged] >= 2 && nextPiles[lastChanged] <= 3 && lastChanged >= 0 && lastChanged < nextPiles.length/2){
+				//continue as long as we are on users side and the number of seeds is 2 or 3
 				programScore = nextPiles[lastChanged];
 				nextPiles[lastChanged] = 0;	
 				lastChanged--;
 			}
 		}else{
 			//the turn of the user input
-			while(nextPiles[lastChanged] >= 2 && nextPiles[lastChanged] <= 3 && lastChanged >= 0){
-				//continue as long as we are on the opponents side and the number of seeds is 2 or 3
+			while(nextPiles[lastChanged] >= 2 && nextPiles[lastChanged] <= 3 && lastChanged >= nextPiles.length/2){
+				//continue as long as we are on the programs side and the number of seeds is 2 or 3
 				inputScore = nextPiles[lastChanged];
 				nextPiles[lastChanged] = 0;
 				lastChanged--;				
