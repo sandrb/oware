@@ -52,6 +52,11 @@ public class GameSander {
 		System.out.println("Select position to sow, options are:" + options);
 		String input = user_input.nextLine();
 		int position = Integer.parseInt(input);
+		while(position < 0 || position > piles.length / 2 || piles[position] == 0){
+			System.out.println("Invalid input, options are:" + options);
+			input = user_input.nextLine();
+			position = Integer.parseInt(input);
+		}
 		int lastChanged = sow(position);
 		capture(lastChanged);//capture seeds if needed
 		
