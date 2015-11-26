@@ -14,7 +14,7 @@ public class GameSander {
 	Random randomGenerator = new Random();//Random Generator, used for testing
 	Scanner user_input = new Scanner( System.in );
 	Algorithm algorithm = new Algorithm();
-	boolean testmode = false; //if set to true, all user input is replaced by random variables.
+	boolean testmode = false; //if set to true, all user input is replaced by random variables and all output is left out.
 	
 	/**
 	 * Initializes a new game with an equal number of seeds per pile.
@@ -24,15 +24,20 @@ public class GameSander {
 		for(int i =0; i < piles.length; i++){
 			piles[i] = seedsPerPile;//assign number to each pile
 		}
-		System.out.println("Who starts? 0: computer, 1: player.");
-		String input = user_input.nextLine();
-		int start = Integer.parseInt(input);
-		while(start < 0 || start > 1){
-			System.out.println("invalid input, valid options are 0 and 1.");
-			input = user_input.nextLine();
+		int start;
+		if(testmode){
+			start = randomGenerator.nextInt(2);
+		}else{
+			System.out.println("Who starts? 0: computer, 1: player.");
+			String input = user_input.nextLine();
 			start = Integer.parseInt(input);
+			while(start < 0 || start > 1){
+				System.out.println("invalid input, valid options are 0 and 1.");
+				input = user_input.nextLine();
+				start = Integer.parseInt(input);
+			}
+			outputPiles();			
 		}
-		outputPiles();
 		
 		programScore = 0;
 		inputScore = 0;	
@@ -49,25 +54,38 @@ public class GameSander {
 	 */
 	public void inputMove(){
 		isProgramTurn = false;
-		String options = "";
-		for(int i = 0; i < piles.length / 2; i++){//for each position
-			if(piles[i] > 0){//check if it is "movable"
-				options += " " + i;//if yes, add it to the options				
+		int position;
+		if(testmode){
+			ArrayList<Integer> options = new ArrayList<Integer>();
+			for(int i = 0; i < piles.length / 2; i++){//for each position
+				if(piles[i] > 0){//check if it is "movable"
+					options.add(i);//if yes, add it to the options				
+				}
 			}
-		}
-		System.out.println("Select position to sow, options are:" + options);
-		String input = user_input.nextLine();
-		int position = Integer.parseInt(input);
-		while(position < 0 || position > piles.length / 2 || piles[position] == 0){
-			System.out.println("Invalid input, options are:" + options);
-			input = user_input.nextLine();
+			position = options.get(randomGenerator.nextInt(options.size()));
+		}else{
+			String options = "";
+			for(int i = 0; i < piles.length / 2; i++){//for each position
+				if(piles[i] > 0){//check if it is "movable"
+					options += " " + i;//if yes, add it to the options				
+				}
+			}
+			System.out.println("Select position to sow, options are:" + options);
+			String input = user_input.nextLine();
 			position = Integer.parseInt(input);
+			while(position < 0 || position > piles.length / 2 || piles[position] == 0){
+				System.out.println("Invalid input, options are:" + options);
+				input = user_input.nextLine();
+				position = Integer.parseInt(input);
+			}
+			
 		}
 		int lastChanged = sow(position);
 		capture(lastChanged);//capture seeds if needed
-		
-		System.out.println();
-		outputPiles();
+		if(!testmode){
+			System.out.println();
+			outputPiles();			
+		}
 
 		if(!hasWonLost()){//no winner yet, continue
 			computerMove();			
@@ -90,8 +108,10 @@ public class GameSander {
 		int position = algorithm.computeNextMove(piles, isProgramTurn, programScore, inputScore);
 		int lastChanged = sow(position);
 		capture(lastChanged);//capture seeds if needed
-		System.out.println("Computer sowed position " + position);
-		outputPiles();
+		if(!testmode){
+			System.out.println("Computer sowed position " + position);
+			outputPiles();
+		}
 		if(!hasWonLost()){//no winner yet, continue
 			inputMove();			
 		}		
@@ -201,23 +221,50 @@ public class GameSander {
 	private boolean hasWonLost(){
 		if(programScore > maxSeeds / 2){
 			//program has more than half the points
-			System.out.println("The program has won, user input has lost.");
+			if(!testmode){
+				System.out.println("The program has won, user input has lost.");				
+			}
 			return true;
 		}else if(inputScore > maxSeeds / 2){
 			//user has more than half the points
-			System.out.println("The user input has won, program has lost.");	
+			if(!testmode){
+				System.out.println("The user input has won, program has lost.");				
+			}	
 			return true;			
 		}else if(inputScore == maxSeeds / 2 && programScore == maxSeeds / 2){
 			//points equally divided
-			System.out.println("The game resulted in a draw.");
+			if(!testmode){
+				System.out.println("The game resulted in a draw.");				
+			}
 			return true;						
 		}else{
 			return false;
 		}
 	}
 	
+	/**
+	 * Switches testmode on
+	 */
 	public void testModeOn(){
 		testmode = true;
+	}
+	
+	/**
+	 * For testing purposes only, says who won or not
+	 * @return
+	 */
+	public int report(){
+		if(programScore > maxSeeds / 2){
+			System.out.println("Program won " + programScore + " - " + inputScore);
+			return 1;
+		}else if(inputScore > maxSeeds / 2){
+			System.out.println("Program lost" + programScore + " - " + inputScore);		
+			return -1;
+		}else{
+			System.out.println("Draw" + programScore + " - " + inputScore);	
+			return 0;
+		}
+		
 	}
 
 	public static void main(String[] args) {
