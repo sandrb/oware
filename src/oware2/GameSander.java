@@ -67,16 +67,22 @@ public class GameSander {
 			String options = "";
 			for(int i = 0; i < piles.length / 2; i++){//for each position
 				if(piles[i] > 0){//check if it is "movable"
-					options += " " + i;//if yes, add it to the options				
+					options += " " + (i+1);//if yes, add it to the options				
 				}
 			}
 			System.out.println("Select position to sow, options are:" + options);
 			String input = user_input.nextLine();
-			position = Integer.parseInt(input);
+			position = Integer.parseInt(input) - 1;
+			if(position >= piles.length / 2 ){
+				position = position % 12;
+			}
 			while(position < 0 || position > piles.length / 2 || piles[position] == 0){
 				System.out.println("Invalid input, options are:" + options);
 				input = user_input.nextLine();
 				position = Integer.parseInt(input);
+				if(position >= piles.length / 2 ){
+					position = position % 12;
+				}
 			}
 			
 		}
@@ -109,7 +115,7 @@ public class GameSander {
 		int lastChanged = sow(position);
 		capture(lastChanged);//capture seeds if needed
 		if(!testmode){
-			System.out.println("Computer sowed position " + position);
+			System.out.println("Computer sowed position " + (position+1) + " or " + (position%12+1));
 			outputPiles();
 		}
 		if(!hasWonLost()){//no winner yet, continue
