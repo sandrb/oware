@@ -393,7 +393,7 @@ public class Game1 {
 		int lastChanged = pos_next.getLastChanged();
 		
 		if(pos_current.getIsMyTurn() ){ // Capture the opponent's seeds
-			while(pos_next.getPiles()[lastChanged] >= 2 && pos_next.getPiles()[lastChanged] <= 3 && lastChanged >= pos_next.getPiles().length/2){
+			while(lastChanged >= pos_next.getPiles().length/2 && pos_next.getPiles()[lastChanged] >= 2 && pos_next.getPiles()[lastChanged] <= 3){
 				//continue as long as we are on the opponents side and the number of seeds is 2 or 3
 				seedsCaptured += pos_next.getPiles()[lastChanged]; 	//didn't consider capture all the seeds
 				lastChanged--;
@@ -408,7 +408,7 @@ public class Game1 {
 			
 		}else if (!pos_current.getIsMyTurn()){ // Capture my seeds
 			//the turn of the user input
-			while(pos_next.getPiles()[lastChanged] >= 2 && pos_next.getPiles()[lastChanged] <= 3 && lastChanged >= 0 && lastChanged<pos_next.getPiles().length/2){
+			while(lastChanged >= 0 && lastChanged<pos_next.getPiles().length/2 && pos_next.getPiles()[lastChanged] >= 2 && pos_next.getPiles()[lastChanged] <= 3){
 				//continue as long as we are on the opponents side and the number of seeds is 2 or 3
 				seedsCaptured += pos_next.getPiles()[lastChanged];
 				lastChanged--;				
@@ -455,9 +455,7 @@ public class Game1 {
 					}else return false;
 				}else return true;				
 			}
-			
-			
-			
+
 		}else return false;
 	}
 	
@@ -467,13 +465,15 @@ public class Game1 {
 			pos_next = sowForCal(pos_current,pos_choose);
 			
 			int[] tmpPiles = new int[currentPiles.length];
+			System.arraycopy(pos_next.getPiles(),0, tmpPiles, 0, tmpPiles.length);
+			
 			int sumRemaining = 0;
 			
 			// Do capture and obtain the new pos_next!
 			int seedsCaptured = 0;
 			int lastChanged = pos_next.getLastChanged();
 			if(pos_current.getIsMyTurn()){ // Capture the opponent's seeds
-				while(pos_next.getPiles()[lastChanged] >= 2 && pos_next.getPiles()[lastChanged] <= 3 && lastChanged >= pos_next.getPiles().length/2){
+				while(lastChanged >= pos_next.getPiles().length/2 && pos_next.getPiles()[lastChanged] >= 2 && pos_next.getPiles()[lastChanged] <= 3){
 					//continue as long as we are on the opponents side and the number of seeds is 2 or 3
 					seedsCaptured += pos_next.getPiles()[lastChanged]; 	//didn't consider capture all the seeds
 					tmpPiles[lastChanged] = 0;
@@ -580,21 +580,36 @@ public class Game1 {
 		    	return valuePosition;
 	    	}
 	    }
-	    for(int i=0;i<12;i++){
-	               // we play the move i
-	               // WRITE function validMove(pos_current, computer_play,i)
-	               // it checks whether we can select the seeds in cell i and play (if there is no seed the function returns false)
-	    	if (validMove(pos_current,i)){
-	                       // WRITE function playMove(&pos_next,pos_current, computer_play,i)
-	                       // we play the move i from pos_current and obtain the new position pos_next
-	    		pos_next = playMove(pos_current,i);
-	 			// pos_next is the new current position and we change the player
-	            tab_values[i]=minMaxValue(pos_next,depth+1)[0];
-	    	} else { // move is not valid
-				if (pos_current.getIsMyTurn()) tab_values[i]=-100;
-				else tab_values[i]=+100;
-	        }
-	    }
+	    if(pos_current.getIsMyTurn()){
+	    	for(int i=0;i<12;i++){
+		               // we play the move i
+		               // WRITE function validMove(pos_current, computer_play,i)
+		               // it checks whether we can select the seeds in cell i and play (if there is no seed the function returns false)
+		    	if (validMove(pos_current,i)){
+		                       // WRITE function playMove(&pos_next,pos_current, computer_play,i)
+		                       // we play the move i from pos_current and obtain the new position pos_next
+		    		pos_next = playMove(pos_current,i);
+		 			// pos_next is the new current position and we change the player
+		            tab_values[i]=minMaxValue(pos_next,depth+1)[0];
+		    	} else { // move is not valid
+					 tab_values[i]=-100;
+		        }
+		    }
+	    }else{  // If it is not my turn, opponent moves
+	    	int j=0;
+	    	for(int i=12;i<24 && j<12;i++){              
+		    	if (validMove(pos_current,i)){
+		                       
+		    		pos_next = playMove(pos_current,i);
+		 			// pos_next is the new current position and we change the player
+		            tab_values[j]=minMaxValue(pos_next,depth+1)[0];
+		    	} else { // move is not valid
+					 tab_values[j]=+100;
+		        }
+		    	j++;
+	    	}
+	    }	    
+	    
 	    int res = tab_values[0];
 		if (pos_current.getIsMyTurn()){
 			for(int i=0;i<12;i++){// WRITE the code: res contains the MAX of tab_values
