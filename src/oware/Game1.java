@@ -32,10 +32,11 @@ public class Game1 {
 		myScore = 0;
 		yourScore = 0;
 		
-		if(start ==1){ //Opponent start first
+		if(start == 0){ //Opponent start first
 			areWeFirstPlayer = false;
 			opponentMove();		
-		}else if(start == 2){//We start first
+		}else if(start == 1){//We start first
+			areWeFirstPlayer = true;
 			myMove();
 		}else if(start == 7){//Opponent start first, testmode enabled
 			testMode = true;
