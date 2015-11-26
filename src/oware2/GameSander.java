@@ -79,7 +79,7 @@ public class GameSander {
 			while(position < 0 || position > piles.length / 2 || piles[position] == 0){
 				System.out.println("Invalid input, options are:" + options);
 				input = user_input.nextLine();
-				position = Integer.parseInt(input);
+				position = Integer.parseInt(input) - 1;
 				if(position >= piles.length / 2 ){
 					position = position % 12;
 				}
