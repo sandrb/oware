@@ -159,7 +159,7 @@ public class Algorithm{
 				returnValue2 = true;
 			}
 		}
-		return (returnValue1 && returnValue2);
+		return (returnValue1 && returnValue2 && (toCheck.movesDone.size() > 0));
 	}
 	
 }
