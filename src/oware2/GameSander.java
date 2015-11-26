@@ -14,6 +14,7 @@ public class GameSander {
 	Random randomGenerator = new Random();//Random Generator, used for testing
 	Scanner user_input = new Scanner( System.in );
 	Algorithm algorithm = new Algorithm();
+	boolean testmode = false; //if set to true, all user input is replaced by random variables.
 	
 	/**
 	 * Initializes a new game with an equal number of seeds per pile.
@@ -213,6 +214,10 @@ public class GameSander {
 		}else{
 			return false;
 		}
+	}
+	
+	public void testModeOn(){
+		testmode = true;
 	}
 
 	public static void main(String[] args) {
