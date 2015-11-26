@@ -29,7 +29,12 @@ public class GameSander {
 		}else{
 			System.out.println("Who starts? 0: computer, 1: player.");
 			String input = user_input.nextLine();
-			start = Integer.parseInt(input);
+
+			try{
+				start = Integer.parseInt(input);			
+			} catch (NumberFormatException e ){
+				start = -1;
+			}
 			while(start < 0 || start > 1){
 				System.out.println("invalid input, valid options are 0 and 1.");
 				input = user_input.nextLine();
@@ -71,14 +76,22 @@ public class GameSander {
 			}
 			System.out.println("Select position to sow, options are:" + options);
 			String input = user_input.nextLine();
-			position = Integer.parseInt(input) - 1;
+			try{
+				position = Integer.parseInt(input) - 1;				
+			} catch (NumberFormatException e ){
+				position = -1;				
+			}
 			if(position >= piles.length / 2 ){
 				position = position % 12;
 			}
 			while(position < 0 || position > piles.length / 2 || piles[position] == 0){
 				System.out.println("Invalid input, options are:" + options);
 				input = user_input.nextLine();
-				position = Integer.parseInt(input) - 1;
+				try{
+					position = Integer.parseInt(input) - 1;		
+				} catch (NumberFormatException e ){
+					position = -1;				
+				}
 				if(position >= piles.length / 2 ){
 					position = position % 12;
 				}
