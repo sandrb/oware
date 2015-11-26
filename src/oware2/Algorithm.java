@@ -18,7 +18,7 @@ public class Algorithm{
 	 */
 	public int computeNextMove(int[] currentPosition, boolean isProgramTurn, int programScore, int inputScore){
 		initialPosition = new Position(currentPosition, isProgramTurn, programScore, inputScore);
-		int maxDepth = 5;
+		int maxDepth = 6;
 		Position result = decisionTree(maxDepth,initialPosition);		
 		return result.movesDone.get(0);
 	}
