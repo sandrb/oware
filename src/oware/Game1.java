@@ -12,8 +12,11 @@ public class Game1 {
 	boolean isMyTurn; //Next move is my turn or not
 	int depthMax = 4; //the maximal depth
 	Scanner user_input = new Scanner( System.in );
+
 	boolean testMode = false;//if testmode enabled, we use random variables instead of user input
+
 	boolean areWeFirstPlayer;
+
 	
 	public static void main(String[] args) {
 		Game1 game = new Game1();
@@ -32,11 +35,11 @@ public class Game1 {
 		myScore = 0;
 		yourScore = 0;
 		
-		if(start == 0){ //Opponent start first
+		if(start ==1){ //Opponent start first
 			areWeFirstPlayer = false;
 			opponentMove();		
-		}else if(start == 1){//We start first
-			areWeFirstPlayer = true;
+
+		}else if(start == 2){//We start first
 			myMove();
 		}else if(start == 7){//Opponent start first, testmode enabled
 			testMode = true;
@@ -44,8 +47,13 @@ public class Game1 {
 		} else if(start == 8){//We start first, testmode enabled
 			testMode = true;
 			myMove();			
+
+		}if(start ==0){//We start first
+			areWeFirstPlayer = true;
+			myMove();
 		}else{
 			System.out.println("Should input 0 or 1");
+
 		}
 	}
 	public void opponentMove(){
@@ -483,7 +491,7 @@ public class Game1 {
 				pos_next.setYourScore(pos_current.getYourScore());
 			}else{ // Capture my seeds
 				//the turn of the user input
-				while(lastChanged >= 0 && lastChanged<pos_next.getPiles().length/2 && pos_next.getPiles()[lastChanged] >= 2 && pos_next.getPiles()[lastChanged] <= 3){
+				while(pos_next.getPiles()[lastChanged] >= 2 && pos_next.getPiles()[lastChanged] <= 3 && lastChanged >= 0 && lastChanged<pos_next.getPiles().length/2){
 					//continue as long as we are on the opponents side and the number of seeds is 2 or 3
 					seedsCaptured += pos_next.getPiles()[lastChanged];
 					tmpPiles[lastChanged] = 0;
@@ -527,34 +535,48 @@ public class Game1 {
 	    
 	    if (depth == depthMax) {
 	    	// current is my turn
+	    	int[] results = new int[pos_current.getPiles().length/2];
 	    	if(pos_current.getIsMyTurn()){ 
 	    		int result = evaluation(pos_current, 0);
+	    		
 	    		if(depthMax%2 == 0){ //bottom is also my turn // choose the max 
 	    			for(int i = 0; i < pos_current.getPiles().length/2; i++){
+	    				results[i] = evaluation(pos_current, i);
 			    		result = Math.max(evaluation(pos_current, i),result);
 			    	}
 	    		}else{ ////bottom is not my turn // choose the min
 	    			for(int i = 0; i < pos_current.getPiles().length/2; i++){
+	    				results[i] = evaluation(pos_current, i);
 			    		result = Math.min(evaluation(pos_current, i),result);
 			    	}
 	    		}
-	    		valuePosition[0] = result;
-	    		valuePosition[1] = -1;
+	    		for(int i=0;i<results.length;i++){
+	    			if(result == results[i]){
+	    				valuePosition[1] = i;
+	    			}
+	    		}
+	    		valuePosition[0] = result;    		
 		    	return valuePosition;
 
 	    	}else{// current is not my turn    		
 	    		int result = evaluation(pos_current, pos_current.getPiles().length/2);
 	    		if(depthMax%2 == 0){ //bottom is also not my turn // choose the min 
 	    			for(int i = pos_current.getPiles().length/2; i < pos_current.getPiles().length; i++){
+	    				results[i] = evaluation(pos_current, i);
 			    		result = Math.min(evaluation(pos_current, i),result);
 			    	}
 	    		}else{ //bottom is my turn // choose the max
 	    			for(int i = pos_current.getPiles().length/2; i < pos_current.getPiles().length; i++){
+	    				results[i] = evaluation(pos_current, i);
 			    		result = Math.max(evaluation(pos_current, i),result);
 			    	}
 	    		}
+	    		for(int i=0;i<results.length;i++){
+	    			if(result == results[i]){
+	    				valuePosition[1] = i;
+	    			}
+	    		}
 	    		valuePosition[0] = result;
-	    		valuePosition[1] = -1;
 		    	return valuePosition;
 	    	}
 	    }
