@@ -13,7 +13,7 @@ public class testGame {
 		int total = won + lost + draw;
 		double percentage = won / total * 100;
 		System.out.println();
-		System.out.println("Total amount of games:" + total);
+		System.out.println("Total amount of games: " + total);
 		System.out.println("Amount won: " + won);
 		System.out.println("Amount lost: " + lost);
 		System.out.println("Amount draw: " + draw);
@@ -37,6 +37,6 @@ public class testGame {
 	
 	public static void main(String[] args) {
 		testGame test = new testGame();
-		test.runTest(10);
+		test.runTest(50);
 	}
 }
