@@ -26,6 +26,11 @@ public class GameSander {
 		System.out.println("Who starts? 0: computer, 1: player.");
 		String input = user_input.nextLine();
 		int start = Integer.parseInt(input);
+		while(start < 0 || start > 1){
+			System.out.println("invalid input, valid options are 0 and 1.");
+			input = user_input.nextLine();
+			start = Integer.parseInt(input);
+		}
 		outputPiles();
 		
 		programScore = 0;
