@@ -132,8 +132,16 @@ public class Algorithm{
 		}
 		//step 3: high values at the end are good, 0.5 points for each seed in the last 5 positions
 		for(int i = 0; i < 5; i++){
-			evaluationScore += input.piles[input.piles.length - 1 - i] * 0.5;
-			evaluationScore -= input.piles[input.piles.length/2 - 1 - i] * 0.5;
+			if(input.piles[input.piles.length - 1 - i] > 10){
+				evaluationScore += 5;
+			}else{
+				evaluationScore += input.piles[input.piles.length - 1 - i] * 0.5;				
+			}
+			if(input.piles[input.piles.length/2 - 1 - i] > 10){
+				evaluationScore -= 5;				
+			}else{
+				evaluationScore -= input.piles[input.piles.length/2 - 1 - i] * 0.5;				
+			}
 		}
 		//input.programScore
 		input.eveluationValue = evaluationScore;
