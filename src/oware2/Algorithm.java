@@ -43,7 +43,7 @@ public class Algorithm{
 				returnPosition.eveluationValue = -10000;
 				for(Position position : positions){
 					compareValue = decisionTree(curDepth - 1, position);
-					if(compareValue.eveluationValue > returnPosition.eveluationValue){
+					if(compareValue.eveluationValue > returnPosition.eveluationValue && isMovable(compareValue)){
 						returnPosition = compareValue;
 					}
 				}	
@@ -52,7 +52,7 @@ public class Algorithm{
 				returnPosition.eveluationValue = 10000;
 				for(Position position : positions){
 					compareValue = decisionTree(curDepth - 1, position);
-					if(compareValue.eveluationValue < returnPosition.eveluationValue){
+					if(compareValue.eveluationValue < returnPosition.eveluationValue && isMovable(compareValue)){
 						returnPosition = compareValue;
 					}
 				}	
@@ -140,11 +140,26 @@ public class Algorithm{
 		return input;
 	}
 	
-	private void printMovesDone(Position input){
-		for(int move : input.movesDone){
-			System.out.print(move + " ");
+	/**
+	 * Checks if both players can still do a move, returns false if not
+	 * @param toCheck
+	 * @return
+	 */
+	private boolean isMovable(Position toCheck){
+		boolean returnValue1 = false;//initially false for first half
+		boolean returnValue2 = false;//initially false for second half
+		for(int i = 0; i < toCheck.piles.length / 2 && !returnValue1; i++){
+			if(toCheck.piles[i] > 0){
+				returnValue1 = true;
+			}
 		}
-		System.out.println();
+
+		for(int i = 0; i < toCheck.piles.length / 2 && !returnValue2; i++){
+			if(toCheck.piles[i + toCheck.piles.length / 2] > 0){
+				returnValue2 = true;
+			}
+		}
+		return (returnValue1 && returnValue2);
 	}
 	
 }
