@@ -1,4 +1,4 @@
-package oware2;
+package oware;
 
 import java.util.ArrayList;
 import java.util.Arrays;

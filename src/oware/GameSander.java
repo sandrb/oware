@@ -1,4 +1,4 @@
-package oware2;
+package oware;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -40,15 +40,6 @@ public class GameSander {
 		
 		programScore = 0;
 		inputScore = 0;	
-		
-		//temp fix
-		/*int[] newPiles = {1,1,6,4,0,1,0,0,0,0,0,20,1,0,2,1,1,1,1,1,1,1,1,0};
-		for(int i = 0; i < piles.length; i++){
-			piles[i] = newPiles[i];
-		}
-		programScore = 24;
-		inputScore = 28;
-		outputPiles();*/
 		
 		if(start == 1){
 			inputMove();

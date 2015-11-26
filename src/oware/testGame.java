@@ -1,4 +1,4 @@
-package oware2;
+package oware;
 
 public class testGame {
 	int result;
