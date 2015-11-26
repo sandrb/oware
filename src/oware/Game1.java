@@ -482,7 +482,7 @@ public class Game1 {
 				pos_next.setYourScore(pos_current.getYourScore());
 			}else{ // Capture my seeds
 				//the turn of the user input
-				while(pos_next.getPiles()[lastChanged] >= 2 && pos_next.getPiles()[lastChanged] <= 3 && lastChanged >= 0 && lastChanged<pos_next.getPiles().length/2){
+				while(lastChanged >= 0 && lastChanged<pos_next.getPiles().length/2 && pos_next.getPiles()[lastChanged] >= 2 && pos_next.getPiles()[lastChanged] <= 3){
 					//continue as long as we are on the opponents side and the number of seeds is 2 or 3
 					seedsCaptured += pos_next.getPiles()[lastChanged];
 					tmpPiles[lastChanged] = 0;
