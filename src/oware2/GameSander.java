@@ -10,7 +10,6 @@ public class GameSander {
 	int programScore; // The score of the program
 	int inputScore; // The score of the input
 	boolean isProgramTurn; //Next move is my turn or not
-	int depthMax = 4; //the maximal depth
 	Random randomGenerator = new Random();//Random Generator, used for testing
 	Scanner user_input = new Scanner( System.in );
 	Algorithm algorithm = new Algorithm();
@@ -41,6 +40,15 @@ public class GameSander {
 		
 		programScore = 0;
 		inputScore = 0;	
+		
+		//temp fix
+		/*int[] newPiles = {1,1,6,4,0,1,0,0,0,0,0,20,1,0,2,1,1,1,1,1,1,1,1,0};
+		for(int i = 0; i < piles.length; i++){
+			piles[i] = newPiles[i];
+		}
+		programScore = 24;
+		inputScore = 28;
+		outputPiles();*/
 		
 		if(start == 1){
 			inputMove();
