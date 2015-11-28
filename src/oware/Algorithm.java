@@ -1,7 +1,6 @@
 package oware;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Algorithm{
 	
@@ -113,7 +112,13 @@ public class Algorithm{
 		double evaluationScore = 0.0;
 		//step 1: give points based on the current score
 		evaluationScore = (double) input.programScore - (double) input.inputScore;
-		//step 2: low values in the beginning of our side are bad as they can be easily captured, good on the opponents side
+		//step 2: if we won +96 points (and -96 if we lose)
+		if(input.programScore > 48){
+			evaluationScore += 96;
+		}else if(input.inputScore > 48){
+			evaluationScore -= 96;			
+		}
+		//step 3: low values in the beginning of our side are bad as they can be easily captured, good on the opponents side
 		for(int i = 0; i < 5; i++){
 			if(input.piles[i + input.piles.length / 2] == 1){
 				//can be formed into 2, assumed 75% chance
@@ -130,7 +135,7 @@ public class Algorithm{
 				evaluationScore += 0.75 * 3;				
 			}
 		}
-		//step 3: high values at the end are good, 0.5 points for each seed in the last 5 positions
+		//step 4: high values at the end are good, 0.5 points for each seed in the last 5 positions
 		for(int i = 0; i < 5; i++){
 			if(input.piles[input.piles.length - 1 - i] > 10){
 				evaluationScore += 5;
